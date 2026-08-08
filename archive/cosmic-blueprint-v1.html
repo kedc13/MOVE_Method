@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Blueprint — Sun · Moon · Rising & Your Chakra Path</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0b1a; --surface: #13102b; --surface2: #1a1635; --surface3: #221d42;
+      --border: rgba(139,92,246,0.18); --border-strong: rgba(139,92,246,0.35);
+      --text: #e8e4ff; --text-muted: #8b82b8;
+      --accent: #7c3aed; --accent-light: #a78bfa;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background: radial-gradient(ellipse at 15% 20%, rgba(99,66,246,0.12) 0%, transparent 55%),
+                  radial-gradient(ellipse at 85% 75%, rgba(139,92,246,0.08) 0%, transparent 55%);
+    }
+    .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .star { position: absolute; background: white; border-radius: 50%; animation: twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s); }
+    @keyframes twinkle { 0%,100%{opacity:var(--min-op,0.2)} 50%{opacity:var(--max-op,0.8)} }
+    .page-wrap { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+    .header { text-align: center; margin-bottom: 2.5rem; }
+    .header-icon { font-size: 36px; display: block; margin-bottom: 0.75rem; animation: float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    h1 { font-family:'Cinzel',serif; font-size:32px; font-weight:600; letter-spacing:0.08em; background:linear-gradient(135deg,#c4b5fd,#a78bfa,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:0.5rem; }
+    .header-sub { font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); }
+    .pips { display:flex; gap:8px; justify-content:center; margin-bottom:2.5rem; }
+    .pip { width:36px; height:4px; border-radius:2px; background:var(--surface3); transition:background 0.4s; }
+    .pip.active { background:var(--accent); }
+    .pip.done { background:var(--accent-light); }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:1.75rem; margin-bottom:1.25rem; position:relative; }
+    .card::before { content:''; position:absolute; inset:0; border-radius:20px; background:linear-gradient(135deg,rgba(139,92,246,0.05) 0%,transparent 60%); pointer-events:none; }
+    .card-label { font-family:'Cinzel',serif; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent-light); margin-bottom:1rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field-group { display:flex; flex-direction:column; gap:7px; }
+    .field-group label { font-size:12px; color:var(--text-muted); letter-spacing:0.05em; }
+    .field-group input { background:var(--surface2); border:1px solid var(--border-strong); border-radius:10px; padding:10px 14px; font-size:14px; font-family:'Lato',sans-serif; color:var(--text); width:100%; transition:border-color 0.2s,box-shadow 0.2s; color-scheme:dark; }
+    .field-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.2); }
+    .field-group input::placeholder { color:var(--text-muted); }
+    .city-status { font-size:11px; margin-top:6px; min-height:16px; display:block; transition:color 0.2s; }
+    .city-status.found { color:#34d399; }
+    .city-status.err { color:#f87171; }
+    .city-status.loading { color:var(--text-muted); }
+    .suggestions { position:absolute; top:100%; left:0; right:0; background:var(--surface2); border:1px solid var(--border-strong); border-radius:10px; margin-top:4px; z-index:100; overflow:hidden; display:none; }
+    .suggestion-item { padding:10px 14px; font-size:13px; cursor:pointer; border-bottom:1px solid var(--border); transition:background 0.15s; }
+    .suggestion-item:last-child { border-bottom:none; }
+    .suggestion-item:hover { background:var(--surface3); color:var(--accent-light); }
+    .city-wrap { position:relative; }
+    .cta-btn { width:100%; padding:14px; border-radius:14px; border:none; background:linear-gradient(135deg,#5b21b6,#7c3aed,#6d28d9); color:white; font-family:'Cinzel',serif; font-size:15px; letter-spacing:0.07em; cursor:pointer; transition:opacity 0.2s,transform 0.15s; margin-top:0.5rem; position:relative; overflow:hidden; }
+    .cta-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,transparent 60%); }
+    .cta-btn:hover:not(:disabled) { opacity:0.9; transform:translateY(-1px); }
+    .cta-btn:active:not(:disabled) { transform:scale(0.98); }
+    .cta-btn:disabled { opacity:0.4; cursor:not-allowed; }
+    .error-msg { margin-top:12px; padding:10px 14px; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#f87171; font-size:13px; text-align:center; }
+    .sign-trio { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:1.5rem; }
+    .sign-card { border-radius:18px; padding:1.2rem 0.8rem; text-align:center; border:1px solid; }
+    .sign-card.sun { background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.4); }
+    .sign-card.moon { background:rgba(139,92,246,0.1); border-color:rgba(139,92,246,0.4); }
+    .sign-card.rising { background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.4); }
+    .sign-card .role { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; margin-bottom:6px; }
+    .sign-card.sun .role { color:#fbbf24; }
+    .sign-card.moon .role { color:#c4b5fd; }
+    .sign-card.rising .role { color:#6ee7b7; }
+    .sign-glyph { font-size:30px; margin-bottom:6px; display:block; }
+    .sign-name { font-family:'Cinzel',serif; font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
+    .chakra-badge { display:inline-block; font-size:10px; padding:3px 9px; border-radius:20px; font-weight:700; letter-spacing:0.04em; }
+    .insight-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.25rem 1.3rem; margin-bottom:1rem; }
+    .section-title { font-family:'Cinzel',serif; font-size:13px; letter-spacing:0.06em; color:var(--accent-light); margin-bottom:0.85rem; }
+    .insight-text { font-size:14px; line-height:1.8; color:var(--text); }
+    .balance-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+    .balance-item { border-radius:12px; padding:11px 13px; border:1px solid; }
+    .balance-item.in { border-color:rgba(16,185,129,0.35); background:rgba(16,185,129,0.08); }
+    .balance-item.out { border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.08); }
+    .b-title { font-size:10px; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:5px; }
+    .balance-item.in .b-title { color:#34d399; }
+    .balance-item.out .b-title { color:#f87171; }
+    .b-text { font-size:12px; line-height:1.55; color:var(--text-muted); }
+    .tools-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .tool-tag { font-size:11px; padding:4px 10px; border-radius:20px; background:rgba(139,92,246,0.15); color:var(--accent-light); border:1px solid rgba(139,92,246,0.3); font-weight:500; }
+    .season-flow { display:flex; flex-direction:column; gap:8px; }
+    .season-item { display:flex; align-items:flex-start; gap:12px; padding:11px 13px; background:var(--surface2); border-radius:12px; border:1px solid var(--border); }
+    .season-dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+    .season-name { font-size:12px; font-weight:700; color:var(--text); }
+    .season-desc { font-size:12px; color:var(--text-muted); line-height:1.5; margin-top:2px; }
+    .truth-box { background:linear-gradient(135deg,rgba(99,66,246,0.15),rgba(99,102,241,0.1)); border:1px solid rgba(139,92,246,0.4); border-radius:18px; padding:1.5rem; margin-bottom:1.25rem; text-align:center; }
+    .truth-title { font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.14em; color:var(--accent-light); margin-bottom:10px; }
+    .truth-text { font-size:15px; line-height:1.8; color:#c4b5fd; font-style:italic; }
+    .loc-pill { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:#6ee7b7; background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:20px; padding:4px 12px; margin-bottom:1.25rem; }
+    .back-link { display:block; text-align:center; font-size:13px; color:var(--text-muted); cursor:pointer; margin-top:1.25rem; transition:color 0.2s; }
+    .back-link:hover { color:var(--accent-light); }
+    .ai-loading { text-align:center; padding:3rem; color:var(--text-muted); font-size:15px; font-family:'Cinzel',serif; letter-spacing:0.06em; animation:pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.25); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:8px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .footer { text-align:center; margin-top:3rem; font-size:11px; color:var(--text-muted); letter-spacing:0.06em; opacity:0.6; }
+    @media(max-width:480px){
+      h1{font-size:24px} .form-row{grid-template-columns:1fr} .sign-trio{grid-template-columns:1fr} .balance-grid{grid-template-columns:1fr} .page-wrap{padding:2rem 1rem 3rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+  <div class="page-wrap">
+    <div class="header">
+      <span class="header-icon">☽</span>
+      <h1>Cosmic Blueprint</h1>
+      <p class="header-sub">Sun · Moon · Rising &amp; Your Chakra Path</p>
+    </div>
+    <div class="pips">
+      <div class="pip active" id="p0"></div>
+      <div class="pip" id="p1"></div>
+      <div class="pip" id="p2"></div>
+    </div>
+
+    <div id="step0">
+      <div class="card">
+        <div class="card-label">✦ Your Birth Details</div>
+        <div class="form-row">
+          <div class="field-group">
+            <label>Date of birth</label>
+            <input type="date" id="bdate" />
+          </div>
+          <div class="field-group">
+            <label>Time of birth</label>
+            <input type="time" id="btime" />
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">✦ Birth Location</div>
+        <div class="field-group">
+          <label>City, State or Country</label>
+          <div class="city-wrap">
+            <input type="text" id="bcity" placeholder="e.g. Chicago, IL or London, UK" autocomplete="off" oninput="onCityInput()" onkeydown="onCityKey(event)" />
+            <div class="suggestions" id="suggestions"></div>
+          </div>
+          <span class="city-status" id="cityStatus"></span>
+        </div>
+        <p style="font-size:11px;color:var(--text-muted);margin-top:10px;">Type your city and select from the dropdown, or choose from suggestions.</p>
+      </div>
+      <button class="cta-btn" id="calcBtn" onclick="calculate()">✦ Reveal My Cosmic Blueprint ✦</button>
+      <div id="errMsg"></div>
+    </div>
+
+    <div id="step1" style="display:none">
+      <div id="locationPill"></div>
+      <div class="sign-trio" id="signTrio"></div>
+      <div id="aiContent"><div class="ai-loading">✦ Reading your cosmic blueprint ✦</div></div>
+      <span class="back-link" onclick="goBack()">← Start over</span>
+    </div>
+
+    <div class="footer">Cosmic Blueprint · Chakra Astrology Guide</div>
+  </div>
+
+<script>
+// Starfield
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--min-op:${0.05+Math.random()*0.15};--max-op:${0.4+Math.random()*0.5}`;
+    c.appendChild(s);
+  }
+})();
+
+// ── Built-in city database (lat, lon, timezone) ──────────────────────────────
+// Covers hundreds of cities worldwide so the tool works without any API calls
+const CITIES = [
+  // USA
+  ["New York, NY, USA",40.7128,-74.0060,"America/New_York"],
+  ["Los Angeles, CA, USA",34.0522,-118.2437,"America/Los_Angeles"],
+  ["Chicago, IL, USA",41.8781,-87.6298,"America/Chicago"],
+  ["Houston, TX, USA",29.7604,-95.3698,"America/Chicago"],
+  ["Phoenix, AZ, USA",33.4484,-112.0740,"America/Phoenix"],
+  ["Philadelphia, PA, USA",39.9526,-75.1652,"America/New_York"],
+  ["San Antonio, TX, USA",29.4241,-98.4936,"America/Chicago"],
+  ["San Diego, CA, USA",32.7157,-117.1611,"America/Los_Angeles"],
+  ["Dallas, TX, USA",32.7767,-96.7970,"America/Chicago"],
+  ["San Jose, CA, USA",37.3382,-121.8863,"America/Los_Angeles"],
+  ["Austin, TX, USA",30.2672,-97.7431,"America/Chicago"],
+  ["Jacksonville, FL, USA",30.3322,-81.6557,"America/New_York"],
+  ["Fort Worth, TX, USA",32.7555,-97.3308,"America/Chicago"],
+  ["Columbus, OH, USA",39.9612,-82.9988,"America/New_York"],
+  ["Charlotte, NC, USA",35.2271,-80.8431,"America/New_York"],
+  ["San Francisco, CA, USA",37.7749,-122.4194,"America/Los_Angeles"],
+  ["Indianapolis, IN, USA",39.7684,-86.1581,"America/Indiana/Indianapolis"],
+  ["Seattle, WA, USA",47.6062,-122.3321,"America/Los_Angeles"],
+  ["Denver, CO, USA",39.7392,-104.9903,"America/Denver"],
+  ["Nashville, TN, USA",36.1627,-86.7816,"America/Chicago"],
+  ["Oklahoma City, OK, USA",35.4676,-97.5164,"America/Chicago"],
+  ["El Paso, TX, USA",31.7619,-106.4850,"America/Denver"],
+  ["Washington, DC, USA",38.9072,-77.0369,"America/New_York"],
+  ["Boston, MA, USA",42.3601,-71.0589,"America/New_York"],
+  ["Las Vegas, NV, USA",36.1699,-115.1398,"America/Los_Angeles"],
+  ["Memphis, TN, USA",35.1495,-90.0490,"America/Chicago"],
+  ["Louisville, KY, USA",38.2527,-85.7585,"America/Kentucky/Louisville"],
+  ["Baltimore, MD, USA",39.2904,-76.6122,"America/New_York"],
+  ["Milwaukee, WI, USA",43.0389,-87.9065,"America/Chicago"],
+  ["Albuquerque, NM, USA",35.0844,-106.6504,"America/Denver"],
+  ["Tucson, AZ, USA",32.2226,-110.9747,"America/Phoenix"],
+  ["Fresno, CA, USA",36.7378,-119.7871,"America/Los_Angeles"],
+  ["Sacramento, CA, USA",38.5816,-121.4944,"America/Los_Angeles"],
+  ["Mesa, AZ, USA",33.4152,-111.8315,"America/Phoenix"],
+  ["Kansas City, MO, USA",39.0997,-94.5786,"America/Chicago"],
+  ["Atlanta, GA, USA",33.7490,-84.3880,"America/New_York"],
+  ["Omaha, NE, USA",41.2565,-95.9345,"America/Chicago"],
+  ["Colorado Springs, CO, USA",38.8339,-104.8214,"America/Denver"],
+  ["Raleigh, NC, USA",35.7796,-78.6382,"America/New_York"],
+  ["Long Beach, CA, USA",33.7701,-118.1937,"America/Los_Angeles"],
+  ["Virginia Beach, VA, USA",36.8529,-75.9780,"America/New_York"],
+  ["Minneapolis, MN, USA",44.9778,-93.2650,"America/Chicago"],
+  ["Tampa, FL, USA",27.9506,-82.4572,"America/New_York"],
+  ["New Orleans, LA, USA",29.9511,-90.0715,"America/Chicago"],
+  ["Arlington, TX, USA",32.7357,-97.1081,"America/Chicago"],
+  ["Miami, FL, USA",25.7617,-80.1918,"America/New_York"],
+  ["Detroit, MI, USA",42.3314,-83.0458,"America/Detroit"],
+  ["Portland, OR, USA",45.5051,-122.6750,"America/Los_Angeles"],
+  ["Cleveland, OH, USA",41.4993,-81.6944,"America/New_York"],
+  ["Pittsburgh, PA, USA",40.4406,-79.9959,"America/New_York"],
+  ["Cincinnati, OH, USA",39.1031,-84.5120,"America/New_York"],
+  ["Orlando, FL, USA",28.5383,-81.3792,"America/New_York"],
+  ["Salt Lake City, UT, USA",40.7608,-111.8910,"America/Denver"],
+  ["Honolulu, HI, USA",21.3069,-157.8583,"Pacific/Honolulu"],
+  ["Anchorage, AK, USA",61.2181,-149.9003,"America/Anchorage"],
+  ["St. Louis, MO, USA",38.6270,-90.1994,"America/Chicago"],
+  ["Hartford, CT, USA",41.7658,-72.6851,"America/New_York"],
+  ["Richmond, VA, USA",37.5407,-77.4360,"America/New_York"],
+  ["Boise, ID, USA",43.6150,-116.2023,"America/Boise"],
+  ["Spokane, WA, USA",47.6588,-117.4260,"America/Los_Angeles"],
+  ["Tulsa, OK, USA",36.1540,-95.9928,"America/Chicago"],
+  ["Buffalo, NY, USA",42.8864,-78.8784,"America/New_York"],
+  ["Madison, WI, USA",43.0731,-89.4012,"America/Chicago"],
+  ["Des Moines, IA, USA",41.5868,-93.6250,"America/Chicago"],
+  ["Little Rock, AR, USA",34.7465,-92.2896,"America/Chicago"],
+  // UK & Ireland
+  ["London, England, UK",51.5074,-0.1278,"Europe/London"],
+  ["Birmingham, England, UK",52.4862,-1.8904,"Europe/London"],
+  ["Manchester, England, UK",53.4808,-2.2426,"Europe/London"],
+  ["Glasgow, Scotland, UK",55.8642,-4.2518,"Europe/London"],
+  ["Liverpool, England, UK",53.4084,-2.9916,"Europe/London"],
+  ["Edinburgh, Scotland, UK",55.9533,-3.1883,"Europe/London"],
+  ["Bristol, England, UK",51.4545,-2.5879,"Europe/London"],
+  ["Leeds, England, UK",53.8008,-1.5491,"Europe/London"],
+  ["Cardiff, Wales, UK",51.4816,-3.1791,"Europe/London"],
+  ["Belfast, Northern Ireland, UK",54.5973,-5.9301,"Europe/London"],
+  ["Dublin, Ireland",53.3498,-6.2603,"Europe/Dublin"],
+  // Canada
+  ["Toronto, Ontario, Canada",43.6532,-79.3832,"America/Toronto"],
+  ["Montreal, Quebec, Canada",45.5017,-73.5673,"America/Toronto"],
+  ["Vancouver, BC, Canada",49.2827,-123.1207,"America/Vancouver"],
+  ["Calgary, Alberta, Canada",51.0447,-114.0719,"America/Edmonton"],
+  ["Edmonton, Alberta, Canada",53.5461,-113.4938,"America/Edmonton"],
+  ["Ottawa, Ontario, Canada",45.4215,-75.6972,"America/Toronto"],
+  ["Winnipeg, Manitoba, Canada",49.8951,-97.1384,"America/Winnipeg"],
+  ["Quebec City, Quebec, Canada",46.8139,-71.2080,"America/Toronto"],
+  ["Hamilton, Ontario, Canada",43.2557,-79.8711,"America/Toronto"],
+  ["Halifax, Nova Scotia, Canada",44.6488,-63.5752,"America/Halifax"],
+  // Australia
+  ["Sydney, NSW, Australia",-33.8688,151.2093,"Australia/Sydney"],
+  ["Melbourne, VIC, Australia",-37.8136,144.9631,"Australia/Melbourne"],
+  ["Brisbane, QLD, Australia",-27.4698,153.0251,"Australia/Brisbane"],
+  ["Perth, WA, Australia",-31.9505,115.8605,"Australia/Perth"],
+  ["Adelaide, SA, Australia",-34.9285,138.6007,"Australia/Adelaide"],
+  ["Gold Coast, QLD, Australia",-28.0167,153.4000,"Australia/Brisbane"],
+  ["Canberra, ACT, Australia",-35.2809,149.1300,"Australia/Sydney"],
+  ["Darwin, NT, Australia",-12.4634,130.8456,"Australia/Darwin"],
+  ["Hobart, TAS, Australia",-42.8821,147.3272,"Australia/Hobart"],
+  // Europe
+  ["Paris, France",48.8566,2.3522,"Europe/Paris"],
+  ["Berlin, Germany",52.5200,13.4050,"Europe/Berlin"],
+  ["Madrid, Spain",40.4168,-3.7038,"Europe/Madrid"],
+  ["Rome, Italy",41.9028,12.4964,"Europe/Rome"],
+  ["Amsterdam, Netherlands",52.3676,4.9041,"Europe/Amsterdam"],
+  ["Brussels, Belgium",50.8503,4.3517,"Europe/Brussels"],
+  ["Vienna, Austria",48.2082,16.3738,"Europe/Vienna"],
+  ["Zurich, Switzerland",47.3769,8.5417,"Europe/Zurich"],
+  ["Stockholm, Sweden",59.3293,18.0686,"Europe/Stockholm"],
+  ["Oslo, Norway",59.9139,10.7522,"Europe/Oslo"],
+  ["Copenhagen, Denmark",55.6761,12.5683,"Europe/Copenhagen"],
+  ["Helsinki, Finland",60.1699,24.9384,"Europe/Helsinki"],
+  ["Warsaw, Poland",52.2297,21.0122,"Europe/Warsaw"],
+  ["Prague, Czech Republic",50.0755,14.4378,"Europe/Prague"],
+  ["Budapest, Hungary",47.4979,19.0402,"Europe/Budapest"],
+  ["Bucharest, Romania",44.4268,26.1025,"Europe/Bucharest"],
+  ["Athens, Greece",37.9838,23.7275,"Europe/Athens"],
+  ["Lisbon, Portugal",38.7223,-9.1393,"Europe/Lisbon"],
+  ["Barcelona, Spain",41.3851,2.1734,"Europe/Madrid"],
+  ["Munich, Germany",48.1351,11.5820,"Europe/Berlin"],
+  ["Hamburg, Germany",53.5753,10.0153,"Europe/Berlin"],
+  ["Milan, Italy",45.4654,9.1859,"Europe/Rome"],
+  ["Naples, Italy",40.8518,14.2681,"Europe/Rome"],
+  ["Lyon, France",45.7640,4.8357,"Europe/Paris"],
+  ["Marseille, France",43.2965,5.3698,"Europe/Paris"],
+  ["Zurich, Switzerland",47.3769,8.5417,"Europe/Zurich"],
+  ["Geneva, Switzerland",46.2044,6.1432,"Europe/Zurich"],
+  ["Kiev, Ukraine",50.4501,30.5234,"Europe/Kiev"],
+  ["Moscow, Russia",55.7558,37.6173,"Europe/Moscow"],
+  ["St. Petersburg, Russia",59.9311,30.3609,"Europe/Moscow"],
+  // Asia
+  ["Tokyo, Japan",35.6762,139.6503,"Asia/Tokyo"],
+  ["Osaka, Japan",34.6937,135.5023,"Asia/Tokyo"],
+  ["Beijing, China",39.9042,116.4074,"Asia/Shanghai"],
+  ["Shanghai, China",31.2304,121.4737,"Asia/Shanghai"],
+  ["Guangzhou, China",23.1291,113.2644,"Asia/Shanghai"],
+  ["Shenzhen, China",22.5431,114.0579,"Asia/Shanghai"],
+  ["Hong Kong, China",22.3193,114.1694,"Asia/Hong_Kong"],
+  ["Seoul, South Korea",37.5665,126.9780,"Asia/Seoul"],
+  ["Mumbai, India",19.0760,72.8777,"Asia/Kolkata"],
+  ["Delhi, India",28.7041,77.1025,"Asia/Kolkata"],
+  ["Bangalore, India",12.9716,77.5946,"Asia/Kolkata"],
+  ["Chennai, India",13.0827,80.2707,"Asia/Kolkata"],
+  ["Hyderabad, India",17.3850,78.4867,"Asia/Kolkata"],
+  ["Kolkata, India",22.5726,88.3639,"Asia/Kolkata"],
+  ["Singapore",1.3521,103.8198,"Asia/Singapore"],
+  ["Bangkok, Thailand",13.7563,100.5018,"Asia/Bangkok"],
+  ["Jakarta, Indonesia",-6.2088,106.8456,"Asia/Jakarta"],
+  ["Kuala Lumpur, Malaysia",3.1390,101.6869,"Asia/Kuala_Lumpur"],
+  ["Manila, Philippines",14.5995,120.9842,"Asia/Manila"],
+  ["Taipei, Taiwan",25.0330,121.5654,"Asia/Taipei"],
+  ["Dhaka, Bangladesh",23.8103,90.4125,"Asia/Dhaka"],
+  ["Karachi, Pakistan",24.8607,67.0011,"Asia/Karachi"],
+  ["Lahore, Pakistan",31.5204,74.3587,"Asia/Karachi"],
+  ["Islamabad, Pakistan",33.6844,73.0479,"Asia/Karachi"],
+  ["Kabul, Afghanistan",34.5553,69.2075,"Asia/Kabul"],
+  ["Tehran, Iran",35.6892,51.3890,"Asia/Tehran"],
+  ["Baghdad, Iraq",33.3152,44.3661,"Asia/Baghdad"],
+  ["Riyadh, Saudi Arabia",24.7136,46.6753,"Asia/Riyadh"],
+  ["Dubai, UAE",25.2048,55.2708,"Asia/Dubai"],
+  ["Abu Dhabi, UAE",24.4539,54.3773,"Asia/Dubai"],
+  ["Doha, Qatar",25.2854,51.5310,"Asia/Qatar"],
+  ["Kuwait City, Kuwait",29.3759,47.9774,"Asia/Kuwait"],
+  ["Beirut, Lebanon",33.8938,35.5018,"Asia/Beirut"],
+  ["Amman, Jordan",31.9454,35.9284,"Asia/Amman"],
+  ["Jerusalem, Israel",31.7683,35.2137,"Asia/Jerusalem"],
+  ["Tel Aviv, Israel",32.0853,34.7818,"Asia/Jerusalem"],
+  ["Colombo, Sri Lanka",6.9271,79.8612,"Asia/Colombo"],
+  ["Kathmandu, Nepal",27.7172,85.3240,"Asia/Kathmandu"],
+  ["Yangon, Myanmar",16.8661,96.1951,"Asia/Yangon"],
+  ["Phnom Penh, Cambodia",11.5564,104.9282,"Asia/Phnom_Penh"],
+  ["Hanoi, Vietnam",21.0278,105.8342,"Asia/Ho_Chi_Minh"],
+  ["Ho Chi Minh City, Vietnam",10.8231,106.6297,"Asia/Ho_Chi_Minh"],
+  ["Ulaanbaatar, Mongolia",47.8864,106.9057,"Asia/Ulaanbaatar"],
+  // Africa
+  ["Cairo, Egypt",30.0444,31.2357,"Africa/Cairo"],
+  ["Lagos, Nigeria",6.5244,3.3792,"Africa/Lagos"],
+  ["Nairobi, Kenya",-1.2921,36.8219,"Africa/Nairobi"],
+  ["Johannesburg, South Africa",-26.2041,28.0473,"Africa/Johannesburg"],
+  ["Cape Town, South Africa",-33.9249,18.4241,"Africa/Johannesburg"],
+  ["Casablanca, Morocco",33.5731,-7.5898,"Africa/Casablanca"],
+  ["Accra, Ghana",5.6037,-0.1870,"Africa/Accra"],
+  ["Addis Ababa, Ethiopia",9.0320,38.7469,"Africa/Addis_Ababa"],
+  ["Dar es Salaam, Tanzania",-6.7924,39.2083,"Africa/Dar_es_Salaam"],
+  ["Kinshasa, DR Congo",-4.3217,15.3125,"Africa/Kinshasa"],
+  ["Algiers, Algeria",36.7372,3.0865,"Africa/Algiers"],
+  ["Tunis, Tunisia",36.8188,10.1658,"Africa/Tunis"],
+  ["Khartoum, Sudan",15.5007,32.5599,"Africa/Khartoum"],
+  ["Kampala, Uganda",0.3476,32.5825,"Africa/Kampala"],
+  ["Lusaka, Zambia",-15.3875,28.3228,"Africa/Lusaka"],
+  ["Harare, Zimbabwe",-17.8252,31.0335,"Africa/Harare"],
+  ["Antananarivo, Madagascar",-18.8792,47.5079,"Indian/Antananarivo"],
+  // Latin America
+  ["São Paulo, Brazil",-23.5505,-46.6333,"America/Sao_Paulo"],
+  ["Rio de Janeiro, Brazil",-22.9068,-43.1729,"America/Sao_Paulo"],
+  ["Brasília, Brazil",-15.8267,-47.9218,"America/Sao_Paulo"],
+  ["Buenos Aires, Argentina",-34.6037,-58.3816,"America/Argentina/Buenos_Aires"],
+  ["Lima, Peru",-12.0464,-77.0428,"America/Lima"],
+  ["Bogotá, Colombia",4.7110,-74.0721,"America/Bogota"],
+  ["Santiago, Chile",-33.4489,-70.6693,"America/Santiago"],
+  ["Caracas, Venezuela",10.4806,-66.9036,"America/Caracas"],
+  ["Quito, Ecuador",-0.1807,-78.4678,"America/Guayaquil"],
+  ["La Paz, Bolivia",-16.5000,-68.1193,"America/La_Paz"],
+  ["Asunción, Paraguay",-25.2867,-57.6470,"America/Asuncion"],
+  ["Montevideo, Uruguay",-34.9011,-56.1645,"America/Montevideo"],
+  ["Mexico City, Mexico",19.4326,-99.1332,"America/Mexico_City"],
+  ["Guadalajara, Mexico",20.6597,-103.3496,"America/Mexico_City"],
+  ["Monterrey, Mexico",25.6866,-100.3161,"America/Monterrey"],
+  ["Guatemala City, Guatemala",14.6349,-90.5069,"America/Guatemala"],
+  ["San José, Costa Rica",9.9281,-84.0907,"America/Costa_Rica"],
+  ["Panama City, Panama",8.9936,-79.5197,"America/Panama"],
+  ["Havana, Cuba",23.1136,-82.3666,"America/Havana"],
+  ["Santo Domingo, Dominican Republic",18.4861,-69.9312,"America/Santo_Domingo"],
+  ["San Juan, Puerto Rico",18.4655,-66.1057,"America/Puerto_Rico"],
+  ["Port-au-Prince, Haiti",18.5944,-72.3074,"America/Port-au-Prince"],
+  ["Kingston, Jamaica",17.9970,-76.7936,"America/Jamaica"],
+  // Middle East / Other
+  ["Istanbul, Turkey",41.0082,28.9784,"Europe/Istanbul"],
+  ["Ankara, Turkey",39.9334,32.8597,"Europe/Istanbul"],
+  ["Cape Town, South Africa",-33.9249,18.4241,"Africa/Johannesburg"],
+  ["Auckland, New Zealand",-36.8485,174.7633,"Pacific/Auckland"],
+  ["Christchurch, New Zealand",-43.5320,172.6306,"Pacific/Auckland"],
+  ["Wellington, New Zealand",-41.2865,174.7762,"Pacific/Auckland"],
+];
+
+let geoCache = null, geoTimer = null;
+
+function onCityInput() {
+  clearTimeout(geoTimer);
+  const v = document.getElementById('bcity').value.trim();
+  const st = document.getElementById('cityStatus');
+  const sg = document.getElementById('suggestions');
+  geoCache = null;
+  if(v.length < 2){ sg.style.display='none'; st.textContent=''; st.className='city-status'; return; }
+  const matches = searchCities(v);
+  if(matches.length) {
+    showSuggestions(matches);
+    st.textContent=''; st.className='city-status';
+  } else {
+    sg.style.display='none';
+    st.textContent='City not found — try another spelling or nearby city'; st.className='city-status err';
+  }
+}
+
+function onCityKey(e) {
+  if(e.key==='Escape') document.getElementById('suggestions').style.display='none';
+}
+
+function searchCities(q) {
+  const lower = q.toLowerCase().replace(/[,\.]/g,' ').trim();
+  const words = lower.split(/\s+/).filter(Boolean);
+  const results = [];
+  for(const c of CITIES) {
+    const name = c[0].toLowerCase();
+    let score = 0;
+    for(const w of words) { if(name.includes(w)) score++; }
+    if(score === words.length) results.push({city:c, score, startsWith: name.startsWith(lower)});
+  }
+  results.sort((a,b)=>(b.startsWith-a.startsWith)||b.score-a.score);
+  return results.slice(0,6);
+}
+
+function showSuggestions(matches) {
+  const sg = document.getElementById('suggestions');
+  sg.innerHTML = matches.map((m,i)=>`<div class="suggestion-item" onclick="selectCity(${CITIES.indexOf(m.city)})">${m.city[0]}</div>`).join('');
+  sg.style.display = 'block';
+}
+
+function selectCity(idx) {
+  const c = CITIES[idx];
+  geoCache = { name:c[0], lat:c[1], lon:c[2], tz:c[3] };
+  document.getElementById('bcity').value = c[0];
+  document.getElementById('suggestions').style.display = 'none';
+  document.getElementById('cityStatus').textContent = '✓ ' + c[0];
+  document.getElementById('cityStatus').className = 'city-status found';
+}
+
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.city-wrap')) document.getElementById('suggestions').style.display='none';
+});
+
+function setPips(s){ for(let i=0;i<3;i++) document.getElementById('p'+i).className='pip'+(i<s?' done':i===s?' active':''); }
+
+function getSunSign(month, day) {
+  const cuts=[20,19,21,20,21,21,23,23,23,23,22,22];
+  const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+  return day>=cuts[month-1]?SIGNS[month-1]:SIGNS[(month+10)%12];
+}
+
+const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+
+function julianDay(year,month,day,hourUTC){
+  if(month<=2){year--;month+=12;}
+  const A=Math.floor(year/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(year+4716))+Math.floor(30.6001*(month+1))+day+B-1524.5+hourUTC/24;
+}
+
+function moonLongitude(jd){
+  const T=(jd-2451545.0)/36525;
+  let L=218.3164477+481267.88123421*T-0.0015786*T*T+T*T*T/538841-T*T*T*T/65194000;
+  const M =(357.5291092+35999.0502909*T-0.0001536*T*T+T*T*T/24490000)*Math.PI/180;
+  const Mp=(134.9633964+477198.8675055*T+0.0087414*T*T+T*T*T/69699-T*T*T*T/14712000)*Math.PI/180;
+  const D =(297.8501921+445267.1114034*T-0.0018819*T*T+T*T*T/545868-T*T*T*T/113065000)*Math.PI/180;
+  const F =(93.2720950+483202.0175233*T-0.0036539*T*T-T*T*T/3526000+T*T*T*T/863310000)*Math.PI/180;
+  const dL=6288774*Math.sin(Mp)+1274027*Math.sin(2*D-Mp)+658314*Math.sin(2*D)+213618*Math.sin(2*Mp)
+    -185116*Math.sin(M)-114332*Math.sin(2*F)+58793*Math.sin(2*D-2*Mp)+57066*Math.sin(2*D-M-Mp)
+    +53322*Math.sin(2*D+Mp)+45758*Math.sin(2*D-M)-40923*Math.sin(M-Mp)-34720*Math.sin(D)
+    -30383*Math.sin(M+Mp)+15327*Math.sin(2*D-2*F)-12528*Math.sin(Mp+2*F)+10980*Math.sin(Mp-2*F)
+    +10675*Math.sin(4*D-Mp)+10034*Math.sin(3*Mp)+8548*Math.sin(4*D-2*Mp)-7888*Math.sin(2*D+M-Mp)
+    -6766*Math.sin(2*D+M)-5163*Math.sin(D-Mp);
+  return (((L+dL/1000000)%360)+360)%360;
+}
+
+function getMoonSign(year,month,day,hourUTC){
+  return SIGNS[Math.floor(moonLongitude(julianDay(year,month,day,hourUTC))/30)];
+}
+
+function getRisingSign(year,month,day,hourUTC,latDeg,lonDeg){
+  const jd=julianDay(year,month,day,hourUTC);
+  const T=(jd-2451545.0)/36525;
+  let theta=280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T-T*T*T/38710000;
+  let lst=(((theta+lonDeg)%360)+360)%360;
+  const lat=latDeg*Math.PI/180, eps=23.4392911*Math.PI/180, ra=lst*Math.PI/180;
+  let asc=Math.atan2(-Math.cos(ra), Math.sin(ra)*Math.cos(eps)+Math.tan(lat)*Math.sin(eps))*180/Math.PI;
+  return SIGNS[Math.floor((((asc%360)+360)%360)/30)];
+}
+
+function getTzOffsetHours(tzName,dateStr){
+  try{
+    const d=new Date(dateStr+'T12:00:00');
+    const local=new Date(d.toLocaleString('en-US',{timeZone:tzName}));
+    const utc=new Date(d.toLocaleString('en-US',{timeZone:'UTC'}));
+    return (local-utc)/3600000;
+  }catch(e){return 0;}
+}
+
+const SIGN_DATA={
+  Aries:      {glyph:'♈',chakra:'Solar Plexus',chakraColor:'#f59e0b',chakraBg:'rgba(245,158,11,0.2)',tools:'Red & orange crystals, physical movement, sun salutation'},
+  Taurus:     {glyph:'♉',chakra:'Heart',       chakraColor:'#10b981',chakraBg:'rgba(16,185,129,0.2)',tools:'Rose quartz, green aventurine, grounding walks, gardening'},
+  Gemini:     {glyph:'♊',chakra:'Throat',      chakraColor:'#3b82f6',chakraBg:'rgba(59,130,246,0.2)',tools:'Blue crystals, journaling, chanting, breathwork'},
+  Cancer:     {glyph:'♋',chakra:'Sacral',      chakraColor:'#f97316',chakraBg:'rgba(249,115,22,0.2)',tools:'Orange moonstone, dance, water ritual, creative arts'},
+  Leo:        {glyph:'♌',chakra:'Solar Plexus',chakraColor:'#f59e0b',chakraBg:'rgba(245,158,11,0.2)',tools:"Citrine, tiger's eye, heart-opening yoga, fire ceremony"},
+  Virgo:      {glyph:'♍',chakra:'Throat',      chakraColor:'#3b82f6',chakraBg:'rgba(59,130,246,0.2)',tools:'Blue lace agate, sound bowls, forest walks, ritual cleansing'},
+  Libra:      {glyph:'♎',chakra:'Heart',       chakraColor:'#10b981',chakraBg:'rgba(16,185,129,0.2)',tools:'Jade, rose quartz, heart coherence breathing, beauty rituals'},
+  Scorpio:    {glyph:'♏',chakra:'Sacral',      chakraColor:'#f97316',chakraBg:'rgba(249,115,22,0.2)',tools:'Garnet, obsidian, deep water meditation, shadow work journaling'},
+  Sagittarius:{glyph:'♐',chakra:'Solar Plexus',chakraColor:'#f59e0b',chakraBg:'rgba(245,158,11,0.2)',tools:'Yellow sapphire, sunstone, vision boarding, open-air meditation'},
+  Capricorn:  {glyph:'♑',chakra:'Root',        chakraColor:'#ef4444',chakraBg:'rgba(239,68,68,0.2)', tools:'Red jasper, smoky quartz, barefoot earthing, ancestor ritual'},
+  Aquarius:   {glyph:'♒',chakra:'Crown',       chakraColor:'#8b5cf6',chakraBg:'rgba(139,92,246,0.2)',tools:'Amethyst, clear quartz, stargazing, breathwork, group ceremony'},
+  Pisces:     {glyph:'♓',chakra:'Third Eye',   chakraColor:'#6366f1',chakraBg:'rgba(99,102,241,0.2)',tools:'Lapis lazuli, fluorite, dream journaling, guided visualization'},
+};
+
+function signCardHTML(sign,role,cls){
+  const d=SIGN_DATA[sign];
+  return `<div class="sign-card ${cls}"><div class="role">${role}</div><span class="sign-glyph">${d.glyph}</span><div class="sign-name">${sign}</div><span class="chakra-badge" style="background:${d.chakraBg};color:${d.chakraColor};border:1px solid ${d.chakraColor}66">${d.chakra} Chakra</span></div>`;
+}
+
+async function calculate(){
+  document.getElementById('errMsg').innerHTML='';
+  const bdate=document.getElementById('bdate').value;
+  const btime=document.getElementById('btime').value;
+  if(!bdate){showErr('Enter your date of birth.');return;}
+  if(!btime){showErr('Birth time is needed for accurate Moon and Rising signs.');return;}
+  if(!geoCache){showErr('Please type your city and select it from the dropdown list.');return;}
+  const btn=document.getElementById('calcBtn');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Calculating your blueprint...';
+  const [yr,mo,dy]=bdate.split('-').map(Number);
+  const [hr,mn]=btime.split(':').map(Number);
+  const localHour=hr+mn/60;
+  const tzOffset=getTzOffsetHours(geoCache.tz,bdate);
+  let utcHour=localHour-tzOffset, utcDay=dy, utcMo=mo, utcYr=yr;
+  if(utcHour<0){utcHour+=24;utcDay--;if(utcDay<1){utcMo--;if(utcMo<1){utcMo=12;utcYr--;}utcDay=new Date(utcYr,utcMo,0).getDate();}}
+  if(utcHour>=24){utcHour-=24;utcDay++;const dim=new Date(utcYr,utcMo,0).getDate();if(utcDay>dim){utcDay=1;utcMo++;if(utcMo>12){utcMo=1;utcYr++;}}}
+  const sun=getSunSign(mo,dy);
+  const moon=getMoonSign(utcYr,utcMo,utcDay,utcHour);
+  const rising=getRisingSign(utcYr,utcMo,utcDay,utcHour,geoCache.lat,geoCache.lon);
+  document.getElementById('step0').style.display='none';
+  document.getElementById('step1').style.display='block';
+  setPips(1);
+  document.getElementById('locationPill').innerHTML=`<span class="loc-pill">✦ ${geoCache.name} · ${geoCache.lat.toFixed(2)}°, ${geoCache.lon.toFixed(2)}°</span>`;
+  document.getElementById('signTrio').innerHTML=signCardHTML(sun,'Sun Sign','sun')+signCardHTML(moon,'Moon Sign','moon')+signCardHTML(rising,'Rising Sign','rising');
+  await loadAI(sun,moon,rising,geoCache.name);
+  btn.disabled=false; btn.innerHTML='✦ Reveal My Cosmic Blueprint ✦';
+}
+
+function showErr(msg){document.getElementById('errMsg').innerHTML=`<div class="error-msg">${msg}</div>`;}
+function goBack(){document.getElementById('step1').style.display='none';document.getElementById('step0').style.display='block';document.getElementById('errMsg').innerHTML='';setPips(0);}
+
+async function loadAI(sun,moon,rising,city){
+  const sd=SIGN_DATA[sun],md=SIGN_DATA[moon],rd=SIGN_DATA[rising];
+  const prompt=`You are a mystical chakra astrology guide. A client was born in ${city}.
+Sun: ${sun} (${sd.chakra} Chakra) — core survival gifts and identity.
+Moon: ${moon} (${md.chakra} Chakra) — soul purpose and what helps them thrive.
+Rising: ${rising} (${rd.chakra} Chakra) — how they meet the world and move through seasons.
+Respond ONLY with valid JSON (no markdown, no preamble):
+{"sunGift":"2-3 sentences on their core survival gift through the ${sd.chakra} Chakra as a ${sun}","sunInBalance":"3 specific signs of being in balance","sunOutBalance":"3 specific signs of being out of balance","moonPurpose":"2-3 sentences on soul purpose and what makes them thrive (Moon in ${moon})","moonThrive":"3 specific practices or environments where they flourish","risingFlow":"2 sentences on how they move through the world (Rising ${rising})","seasonalWisdom":[{"season":"Sun in ${sun}","color":"#f59e0b","guidance":"one sentence on this seasonal activation"},{"season":"Sun in ${moon}","color":"#a78bfa","guidance":"one sentence on Moon-season activation"},{"season":"Sun in ${rising}","color":"#34d399","guidance":"one sentence on Rising-season activation"}],"integratedMessage":"2-3 sentences weaving all three signs into a unified message about who this person is"}`;
+  try{
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const data=await resp.json();
+    const text=data.content.map(b=>b.text||'').join('');
+    const ai=JSON.parse(text.replace(/```json|```/g,'').trim());
+    renderReading(sun,moon,rising,ai);
+  }catch(e){renderFallback(sun,moon,rising);}
+}
+
+function renderReading(sun,moon,rising,ai){
+  const sd=SIGN_DATA[sun];
+  document.getElementById('aiContent').innerHTML=`
+    <div class="insight-box">
+      <div class="section-title">☀️ Sun in ${sun} — Your Survival Gift</div>
+      <p class="insight-text">${ai.sunGift}</p>
+      <div class="balance-grid">
+        <div class="balance-item in"><div class="b-title">✓ In Balance</div><div class="b-text">${ai.sunInBalance}</div></div>
+        <div class="balance-item out"><div class="b-title">⚠ Out of Balance</div><div class="b-text">${ai.sunOutBalance}</div></div>
+      </div>
+      <div style="margin-top:12px"><div class="b-title" style="color:#a78bfa;margin-bottom:4px">✦ Tools &amp; Allies</div>
+      <div class="tools-list">${sd.tools.split(',').map(t=>`<span class="tool-tag">${t.trim()}</span>`).join('')}</div></div>
+    </div>
+    <div class="insight-box">
+      <div class="section-title">🌙 Moon in ${moon} — Your Purpose</div>
+      <p class="insight-text">${ai.moonPurpose}</p>
+      <p style="font-size:13px;color:var(--text-muted);line-height:1.75;margin-top:12px">${ai.moonThrive}</p>
+    </div>
+    <div class="insight-box">
+      <div class="section-title">⬆ Rising ${rising} — Your Seasonal Flow</div>
+      <p class="insight-text">${ai.risingFlow}</p>
+    </div>
+    <div class="insight-box">
+      <div class="section-title">🌀 Seasonal Activations</div>
+      <div class="season-flow">${ai.seasonalWisdom.map(s=>`<div class="season-item"><div class="season-dot" style="background:${s.color}"></div><div><div class="season-name">${s.season}</div><div class="season-desc">${s.guidance}</div></div></div>`).join('')}</div>
+    </div>
+    <div class="truth-box">
+      <div class="truth-title">✦ Your Integrated Truth ✦</div>
+      <p class="truth-text">${ai.integratedMessage}</p>
+    </div>`;
+  setPips(2);
+}
+
+function renderFallback(sun,moon,rising){
+  document.getElementById('aiContent').innerHTML=`
+    <div class="insight-box"><div class="section-title">☀️ Sun in ${sun} — ${SIGN_DATA[sun].chakra} Chakra</div>
+    <div class="tools-list">${SIGN_DATA[sun].tools.split(',').map(t=>`<span class="tool-tag">${t.trim()}</span>`).join('')}</div></div>
+    <div class="insight-box"><div class="section-title">🌙 Moon in ${moon}</div>
+    <p class="insight-text">Your ${SIGN_DATA[moon].chakra} Chakra Moon guides your emotional truth and soul path.</p></div>
+    <div class="insight-box"><div class="section-title">⬆ Rising ${rising}</div>
+    <p class="insight-text">Your ${SIGN_DATA[rising].chakra} Chakra Rising shapes how you enter each new season.</p></div>`;
+  setPips(2);
+}
+</script>
+</body>
+</html>
