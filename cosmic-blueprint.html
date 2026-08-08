@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmic Blueprint — Sun · Moon · Rising & Your Chakra Path</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0b1a; --surface: #13102b; --surface2: #1a1635; --surface3: #221d42;
+      --border: rgba(139,92,246,0.18); --border-strong: rgba(139,92,246,0.35);
+      --text: #e8e4ff; --text-muted: #8b82b8; --accent: #7c3aed; --accent-light: #a78bfa;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family:'Lato',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+      background:radial-gradient(ellipse at 15% 20%,rgba(99,66,246,0.12) 0%,transparent 55%),
+                 radial-gradient(ellipse at 85% 75%,rgba(139,92,246,0.08) 0%,transparent 55%); }
+    .stars { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .star { position:absolute; background:white; border-radius:50%; animation:twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s); }
+    @keyframes twinkle { 0%,100%{opacity:var(--min-op,0.2)} 50%{opacity:var(--max-op,0.8)} }
+    .page-wrap { position:relative; z-index:1; max-width:680px; margin:0 auto; padding:3rem 1.5rem 4rem; }
+    .header { text-align:center; margin-bottom:2.5rem; }
+    .header-icon { font-size:36px; display:block; margin-bottom:0.75rem; animation:float 4s ease-in-out infinite; }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    h1 { font-family:'Cinzel',serif; font-size:32px; font-weight:600; letter-spacing:0.08em;
+      background:linear-gradient(135deg,#c4b5fd,#a78bfa,#818cf8); -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:0.5rem; }
+    .header-sub { font-size:12px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); }
+    .pips { display:flex; gap:8px; justify-content:center; margin-bottom:2.5rem; }
+    .pip { width:36px; height:4px; border-radius:2px; background:var(--surface3); transition:background 0.4s; }
+    .pip.active { background:var(--accent); } .pip.done { background:var(--accent-light); }
+    .card { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:1.75rem; margin-bottom:1.25rem; position:relative; }
+    .card::before { content:''; position:absolute; inset:0; border-radius:20px; background:linear-gradient(135deg,rgba(139,92,246,0.05) 0%,transparent 60%); pointer-events:none; }
+    .card-label { font-family:'Cinzel',serif; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent-light); margin-bottom:1rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .field-group { display:flex; flex-direction:column; gap:7px; }
+    .field-group label { font-size:12px; color:var(--text-muted); letter-spacing:0.05em; }
+    .field-group input { background:var(--surface2); border:1px solid var(--border-strong); border-radius:10px;
+      padding:10px 14px; font-size:14px; font-family:'Lato',sans-serif; color:var(--text); width:100%;
+      transition:border-color 0.2s,box-shadow 0.2s; color-scheme:dark; }
+    .field-group input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(124,58,237,0.2); }
+    .field-group input::placeholder { color:var(--text-muted); }
+    .loc-wrap { position:relative; }
+    .suggestions { position:absolute; top:calc(100% + 4px); left:0; right:0; background:var(--surface2);
+      border:1px solid var(--border-strong); border-radius:12px; z-index:200; overflow:hidden;
+      display:none; max-height:260px; overflow-y:auto; }
+    .sug-item { padding:11px 14px; font-size:13px; cursor:pointer; border-bottom:1px solid var(--border);
+      transition:background 0.15s; }
+    .sug-item:last-child { border-bottom:none; }
+    .sug-item:hover, .sug-item.hi { background:var(--surface3); }
+    .sug-main { color:var(--text); font-weight:500; }
+    .sug-sub { color:var(--text-muted); font-size:11px; margin-top:1px; }
+    .loc-status { font-size:11px; margin-top:6px; min-height:16px; display:block; }
+    .loc-status.ok { color:#34d399; } .loc-status.err { color:#f87171; } .loc-status.busy { color:var(--text-muted); }
+    .manual-toggle { font-size:11px; color:var(--accent-light); cursor:pointer; margin-top:8px; display:inline-block; }
+    .manual-toggle:hover { text-decoration:underline; }
+    .manual-coords { display:none; margin-top:10px; }
+    .manual-coords.open { display:block; }
+    .cta-btn { width:100%; padding:14px; border-radius:14px; border:none;
+      background:linear-gradient(135deg,#5b21b6,#7c3aed,#6d28d9); color:white;
+      font-family:'Cinzel',serif; font-size:15px; letter-spacing:0.07em; cursor:pointer;
+      transition:opacity 0.2s,transform 0.15s; margin-top:0.5rem; position:relative; overflow:hidden; }
+    .cta-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,0.08) 0%,transparent 60%); }
+    .cta-btn:hover:not(:disabled) { opacity:0.9; transform:translateY(-1px); }
+    .cta-btn:active:not(:disabled) { transform:scale(0.98); }
+    .cta-btn:disabled { opacity:0.4; cursor:not-allowed; }
+    .error-msg { margin-top:12px; padding:10px 14px; background:rgba(239,68,68,0.12);
+      border:1px solid rgba(239,68,68,0.3); border-radius:10px; color:#f87171; font-size:13px; text-align:center; }
+    .sign-trio { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:1.5rem; }
+    .sign-card { border-radius:18px; padding:1.2rem 0.8rem; text-align:center; border:1px solid; }
+    .sign-card.sun { background:rgba(245,158,11,0.1); border-color:rgba(245,158,11,0.4); }
+    .sign-card.moon { background:rgba(139,92,246,0.1); border-color:rgba(139,92,246,0.4); }
+    .sign-card.rising { background:rgba(16,185,129,0.1); border-color:rgba(16,185,129,0.4); }
+    .sign-card .role { font-size:9px; letter-spacing:0.12em; text-transform:uppercase; font-weight:700; margin-bottom:6px; }
+    .sign-card.sun .role { color:#fbbf24; } .sign-card.moon .role { color:#c4b5fd; } .sign-card.rising .role { color:#6ee7b7; }
+    .sign-glyph { font-size:30px; margin-bottom:6px; display:block; }
+    .sign-name { font-family:'Cinzel',serif; font-size:13px; font-weight:600; color:var(--text); margin-bottom:8px; }
+    .chakra-badge { display:inline-block; font-size:10px; padding:3px 9px; border-radius:20px; font-weight:700; letter-spacing:0.04em; }
+    .insight-box { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:1.25rem 1.3rem; margin-bottom:1rem; }
+    .section-title { font-family:'Cinzel',serif; font-size:13px; letter-spacing:0.06em; color:var(--accent-light); margin-bottom:0.85rem; }
+    .insight-text { font-size:14px; line-height:1.8; color:var(--text); }
+    .balance-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
+    .balance-item { border-radius:12px; padding:11px 13px; border:1px solid; }
+    .balance-item.in { border-color:rgba(16,185,129,0.35); background:rgba(16,185,129,0.08); }
+    .balance-item.out { border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.08); }
+    .b-title { font-size:10px; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:5px; }
+    .balance-item.in .b-title { color:#34d399; } .balance-item.out .b-title { color:#f87171; }
+    .b-text { font-size:12px; line-height:1.55; color:var(--text-muted); }
+    .tools-list { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+    .tool-tag { font-size:11px; padding:4px 10px; border-radius:20px; background:rgba(139,92,246,0.15);
+      color:var(--accent-light); border:1px solid rgba(139,92,246,0.3); font-weight:500; }
+    .season-flow { display:flex; flex-direction:column; gap:8px; }
+    .season-item { display:flex; align-items:flex-start; gap:12px; padding:11px 13px;
+      background:var(--surface2); border-radius:12px; border:1px solid var(--border); }
+    .season-dot { width:10px; height:10px; border-radius:50%; margin-top:4px; flex-shrink:0; }
+    .season-name { font-size:12px; font-weight:700; color:var(--text); }
+    .season-desc { font-size:12px; color:var(--text-muted); line-height:1.5; margin-top:2px; }
+    .truth-box { background:linear-gradient(135deg,rgba(99,66,246,0.15),rgba(99,102,241,0.1));
+      border:1px solid rgba(139,92,246,0.4); border-radius:18px; padding:1.5rem; margin-bottom:1.25rem; text-align:center; }
+    .truth-title { font-family:'Cinzel',serif; font-size:11px; letter-spacing:0.14em; color:var(--accent-light); margin-bottom:10px; }
+    .truth-text { font-size:15px; line-height:1.8; color:#c4b5fd; font-style:italic; }
+    .loc-pill { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:#6ee7b7;
+      background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); border-radius:20px; padding:4px 12px; margin-bottom:1.25rem; }
+    .back-link { display:block; text-align:center; font-size:13px; color:var(--text-muted); cursor:pointer; margin-top:1.25rem; transition:color 0.2s; }
+    .back-link:hover { color:var(--accent-light); }
+    .ai-loading { text-align:center; padding:3rem; color:var(--text-muted); font-size:15px; font-family:'Cinzel',serif; letter-spacing:0.06em; animation:pulse 1.8s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .spinner { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.25); border-top-color:white; border-radius:50%; animation:spin 0.7s linear infinite; vertical-align:middle; margin-right:8px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .footer { text-align:center; margin-top:3rem; font-size:11px; color:var(--text-muted); letter-spacing:0.06em; opacity:0.6; }
+    @media(max-width:480px){ h1{font-size:24px} .form-row,.sign-trio,.balance-grid{grid-template-columns:1fr} .page-wrap{padding:2rem 1rem 3rem} }
+  </style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="page-wrap">
+  <div class="header">
+    <span class="header-icon">☽</span>
+    <h1>Cosmic Blueprint</h1>
+    <p class="header-sub">Sun · Moon · Rising &amp; Your Chakra Path</p>
+  </div>
+  <div class="pips">
+    <div class="pip active" id="p0"></div>
+    <div class="pip" id="p1"></div>
+    <div class="pip" id="p2"></div>
+  </div>
+
+  <div id="step0">
+    <div class="card">
+      <div class="card-label">✦ Your Birth Details</div>
+      <div class="form-row">
+        <div class="field-group">
+          <label>Date of birth</label>
+          <input type="date" id="bdate" />
+        </div>
+        <div class="field-group">
+          <label>Time of birth</label>
+          <input type="time" id="btime" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">✦ Birth Location</div>
+      <div class="field-group">
+        <label>City, town, zip code, or place name</label>
+        <div class="loc-wrap">
+          <input type="text" id="locInput" autocomplete="off"
+            placeholder="e.g. Killeen TX, Fort Hood, 76544, London UK"
+            oninput="onLocInput()" onkeydown="onLocKey(event)" />
+          <div class="suggestions" id="sugs"></div>
+        </div>
+        <span class="loc-status" id="locSt"></span>
+      </div>
+      <span class="manual-toggle" onclick="toggleManual()">✦ Enter coordinates manually instead</span>
+      <div class="manual-coords" id="manualCoords">
+        <div class="form-row" style="margin-top:10px">
+          <div class="field-group">
+            <label>Latitude (e.g. 31.1171)</label>
+            <input type="number" id="manLat" placeholder="31.1171" step="0.0001" />
+          </div>
+          <div class="field-group">
+            <label>Longitude (e.g. -97.7278)</label>
+            <input type="number" id="manLon" placeholder="-97.7278" step="0.0001" />
+          </div>
+        </div>
+        <div class="field-group" style="margin-top:10px">
+          <label>Place name (for your reading)</label>
+          <input type="text" id="manName" placeholder="Killeen, TX" />
+        </div>
+        <div class="field-group" style="margin-top:10px">
+          <label>Timezone (e.g. America/Chicago)</label>
+          <input type="text" id="manTz" placeholder="America/Chicago" />
+        </div>
+        <button style="margin-top:10px;width:100%;padding:9px;border-radius:10px;border:1px solid var(--border-strong);background:var(--surface3);color:var(--accent-light);font-family:Lato,sans-serif;font-size:13px;cursor:pointer;" onclick="useManual()">Use These Coordinates</button>
+      </div>
+    </div>
+
+    <button class="cta-btn" id="calcBtn" onclick="calculate()">✦ Reveal My Cosmic Blueprint ✦</button>
+    <div id="errMsg"></div>
+  </div>
+
+  <div id="step1" style="display:none">
+    <div id="locPill"></div>
+    <div class="sign-trio" id="signTrio"></div>
+    <div id="aiContent"><div class="ai-loading">✦ Reading your cosmic blueprint ✦</div></div>
+    <span class="back-link" onclick="goBack()">← Start over</span>
+  </div>
+
+  <div class="footer">Cosmic Blueprint · Chakra Astrology Guide</div>
+</div>
+
+<script>
+// ── Starfield ─────────────────────────────────────────────────────────────────
+(function(){
+  const c=document.getElementById('stars');
+  for(let i=0;i<120;i++){
+    const s=document.createElement('div'); s.className='star';
+    const z=Math.random()*2.5+0.5;
+    s.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*4}s;--delay:${Math.random()*4}s;--min-op:${0.05+Math.random()*0.15};--max-op:${0.4+Math.random()*0.5}`;
+    c.appendChild(s);
+  }
+})();
+
+// ── Built-in database: 500+ cities + Texas focus + military bases ─────────────
+// Format: [name, lat, lon, timezone]
+const DB = [
+  // ── Texas (comprehensive) ────────────────────────────────────────────────
+  ["Killeen, TX",31.1171,-97.7278,"America/Chicago"],
+  ["Fort Hood, TX",31.1348,-97.7781,"America/Chicago"],
+  ["Fort Cavazos, TX",31.1348,-97.7781,"America/Chicago"],
+  ["Copperas Cove, TX",31.1218,-97.9036,"America/Chicago"],
+  ["Harker Heights, TX",31.0804,-97.6500,"America/Chicago"],
+  ["Temple, TX",31.0982,-97.3428,"America/Chicago"],
+  ["Waco, TX",31.5493,-97.1467,"America/Chicago"],
+  ["Austin, TX",30.2672,-97.7431,"America/Chicago"],
+  ["San Antonio, TX",29.4241,-98.4936,"America/Chicago"],
+  ["Houston, TX",29.7604,-95.3698,"America/Chicago"],
+  ["Dallas, TX",32.7767,-96.7970,"America/Chicago"],
+  ["Fort Worth, TX",32.7555,-97.3308,"America/Chicago"],
+  ["El Paso, TX",31.7619,-106.4850,"America/Denver"],
+  ["Arlington, TX",32.7357,-97.1081,"America/Chicago"],
+  ["Corpus Christi, TX",27.8006,-97.3964,"America/Chicago"],
+  ["Plano, TX",33.0198,-96.6989,"America/Chicago"],
+  ["Laredo, TX",27.5306,-99.4803,"America/Chicago"],
+  ["Lubbock, TX",33.5779,-101.8552,"America/Chicago"],
+  ["Garland, TX",32.9126,-96.6389,"America/Chicago"],
+  ["Irving, TX",32.8140,-96.9489,"America/Chicago"],
+  ["Amarillo, TX",35.2220,-101.8313,"America/Chicago"],
+  ["Grand Prairie, TX",32.7460,-97.0197,"America/Chicago"],
+  ["Brownsville, TX",25.9017,-97.4975,"America/Chicago"],
+  ["McKinney, TX",33.1972,-96.6397,"America/Chicago"],
+  ["Frisco, TX",33.1507,-96.8236,"America/Chicago"],
+  ["Pasadena, TX",29.6911,-95.2091,"America/Chicago"],
+  ["Mesquite, TX",32.7668,-96.5992,"America/Chicago"],
+  ["Killeen, TX",31.1171,-97.7278,"America/Chicago"],
+  ["McAllen, TX",26.2034,-98.2300,"America/Chicago"],
+  ["Fayet­teville, TX",29.9058,-96.6711,"America/Chicago"],
+  ["Wichita Falls, TX",33.9137,-98.4934,"America/Chicago"],
+  ["Abilene, TX",32.4487,-99.7331,"America/Chicago"],
+  ["Beaumont, TX",30.0860,-94.1018,"America/Chicago"],
+  ["Odessa, TX",31.8457,-102.3676,"America/Chicago"],
+  ["Midland, TX",31.9974,-102.0779,"America/Chicago"],
+  ["Round Rock, TX",30.5083,-97.6789,"America/Chicago"],
+  ["Denton, TX",33.2148,-97.1331,"America/Chicago"],
+  ["Carrollton, TX",32.9537,-96.8903,"America/Chicago"],
+  ["Lewisville, TX",33.0462,-96.9942,"America/Chicago"],
+  ["Pearland, TX",29.5636,-95.2860,"America/Chicago"],
+  ["Richardson, TX",32.9483,-96.7299,"America/Chicago"],
+  ["Sugar Land, TX",29.6197,-95.6349,"America/Chicago"],
+  ["Edinburg, TX",26.3017,-98.1633,"America/Chicago"],
+  ["College Station, TX",30.6280,-96.3344,"America/Chicago"],
+  ["Tyler, TX",32.3513,-95.3011,"America/Chicago"],
+  ["San Marcos, TX",29.8833,-97.9414,"America/Chicago"],
+  ["Georgetown, TX",30.6327,-97.6772,"America/Chicago"],
+  ["New Braunfels, TX",29.7030,-98.1245,"America/Chicago"],
+  ["Longview, TX",32.5007,-94.7405,"America/Chicago"],
+  ["Pflugerville, TX",30.4394,-97.6200,"America/Chicago"],
+  ["Allen, TX",33.1032,-96.6705,"America/Chicago"],
+  ["League City, TX",29.5075,-95.0949,"America/Chicago"],
+  ["Edinburg, TX",26.3017,-98.1633,"America/Chicago"],
+  ["Bryan, TX",30.6744,-96.3698,"America/Chicago"],
+  ["Mission, TX",26.2159,-98.3252,"America/Chicago"],
+  ["Baytown, TX",29.7355,-94.9774,"America/Chicago"],
+  ["Pharr, TX",26.1948,-98.1836,"America/Chicago"],
+  ["Rowlett, TX",32.9029,-96.5636,"America/Chicago"],
+  ["Flower Mound, TX",33.0145,-97.0964,"America/Chicago"],
+  ["Conroe, TX",30.3119,-95.4561,"America/Chicago"],
+  ["Cedar Park, TX",30.5052,-97.8203,"America/Chicago"],
+  ["Mansfield, TX",32.5632,-97.1417,"America/Chicago"],
+  ["Missouri City, TX",29.6186,-95.5375,"America/Chicago"],
+  ["Victoria, TX",28.8053,-97.0036,"America/Chicago"],
+  ["Euless, TX",32.8371,-97.0819,"America/Chicago"],
+  ["Galveston, TX",29.3013,-94.7977,"America/Chicago"],
+  ["Katy, TX",29.7858,-95.8245,"America/Chicago"],
+  ["Waxahachie, TX",32.3868,-96.8486,"America/Chicago"],
+  ["North Richland Hills, TX",32.8343,-97.2289,"America/Chicago"],
+  ["Haltom City, TX",32.7993,-97.2686,"America/Chicago"],
+  ["Burleson, TX",32.5421,-97.3208,"America/Chicago"],
+  ["San Angelo, TX",31.4638,-100.4370,"America/Chicago"],
+  ["Lufkin, TX",31.3382,-94.7291,"America/Chicago"],
+  ["Nacogdoches, TX",31.6035,-94.6554,"America/Chicago"],
+  ["Sherman, TX",33.6357,-96.6089,"America/Chicago"],
+  ["Rockwall, TX",32.9312,-96.4597,"America/Chicago"],
+  ["Texarkana, TX",33.4251,-94.0477,"America/Chicago"],
+  ["Huntsville, TX",30.7235,-95.5507,"America/Chicago"],
+  ["Seguin, TX",29.5688,-97.9647,"America/Chicago"],
+  ["Weatherford, TX",32.7593,-97.7975,"America/Chicago"],
+  ["Kerrville, TX",30.0474,-99.1403,"America/Chicago"],
+  ["Stephenville, TX",32.2207,-98.2028,"America/Chicago"],
+  ["Boerne, TX",29.7947,-98.7320,"America/Chicago"],
+  ["Bastrop, TX",30.1105,-97.3153,"America/Chicago"],
+  ["Cleburne, TX",32.3468,-97.3864,"America/Chicago"],
+  ["Greenville, TX",33.1373,-96.1108,"America/Chicago"],
+  ["Ennis, TX",32.3293,-96.6247,"America/Chicago"],
+  ["Jacksonville, TX",31.9638,-95.2705,"America/Chicago"],
+  ["Lumberton, TX",30.2685,-94.1885,"America/Chicago"],
+  ["Palestine, TX",31.7621,-95.6308,"America/Chicago"],
+  ["Paris, TX",33.6609,-95.5555,"America/Chicago"],
+  ["Marble Falls, TX",30.5782,-98.2731,"America/Chicago"],
+  ["Fredericksburg, TX",30.2752,-98.8720,"America/Chicago"],
+  ["Uvalde, TX",29.2097,-99.7862,"America/Chicago"],
+  ["Del Rio, TX",29.3627,-100.8968,"America/Chicago"],
+  ["Eagle Pass, TX",28.7091,-100.4995,"America/Chicago"],
+  ["Harlingen, TX",26.1906,-97.6961,"America/Chicago"],
+  ["Weslaco, TX",26.1595,-97.9908,"America/Chicago"],
+  ["Kingsville, TX",27.5159,-97.8561,"America/Chicago"],
+  ["Beeville, TX",28.4011,-97.7475,"America/Chicago"],
+  ["Bay City, TX",28.9828,-95.9691,"America/Chicago"],
+  ["Lake Jackson, TX",29.0336,-95.4344,"America/Chicago"],
+  ["Angleton, TX",29.1697,-95.4319,"America/Chicago"],
+  ["Clute, TX",29.0197,-95.4005,"America/Chicago"],
+  ["Gatesville, TX",31.4349,-97.7431,"America/Chicago"],
+  ["Belton, TX",31.0563,-97.4653,"America/Chicago"],
+  ["Lampasas, TX",31.0638,-98.1781,"America/Chicago"],
+  ["Llano, TX",30.7530,-98.6742,"America/Chicago"],
+  ["Brady, TX",31.1349,-99.3350,"America/Chicago"],
+  ["Coleman, TX",31.8285,-99.4259,"America/Chicago"],
+  ["Brownwood, TX",31.7093,-98.9912,"America/Chicago"],
+  ["Granbury, TX",32.4418,-97.7939,"America/Chicago"],
+  ["Glen Rose, TX",32.2326,-97.7531,"America/Chicago"],
+  ["Hillsboro, TX",32.0132,-97.1267,"America/Chicago"],
+  ["Corsicana, TX",32.0954,-96.4689,"America/Chicago"],
+  ["Athens, TX",32.2043,-95.8558,"America/Chicago"],
+  ["Lindale, TX",32.5151,-95.4086,"America/Chicago"],
+  ["Marshall, TX",32.5449,-94.3674,"America/Chicago"],
+  ["Carthage, TX",32.1571,-94.3352,"America/Chicago"],
+  ["Center, TX",31.7960,-94.1780,"America/Chicago"],
+  ["Henderson, TX",32.1532,-94.7963,"America/Chicago"],
+  ["Gilmer, TX",32.7313,-94.9457,"America/Chicago"],
+  ["Mount Pleasant, TX",33.1565,-94.9685,"America/Chicago"],
+  ["Daingerfield, TX",33.0365,-94.7274,"America/Chicago"],
+  ["Sulphur Springs, TX",33.1387,-95.6011,"America/Chicago"],
+  ["Bonham, TX",33.5760,-96.1786,"America/Chicago"],
+  ["Denison, TX",33.7557,-96.5369,"America/Chicago"],
+  ["Gainesville, TX",33.6257,-97.1333,"America/Chicago"],
+  ["Decatur, TX",33.2348,-97.5828,"America/Chicago"],
+  ["Graham, TX",33.1068,-98.5892,"America/Chicago"],
+  ["Mineral Wells, TX",32.8082,-98.1117,"America/Chicago"],
+  ["Breckenridge, TX",32.7543,-98.9012,"America/Chicago"],
+  ["Eastland, TX",32.4015,-98.8181,"America/Chicago"],
+  ["Comanche, TX",31.8988,-98.6034,"America/Chicago"],
+  ["Early, TX",31.7449,-99.1442,"America/Chicago"],
+  ["Sweetwater, TX",32.4710,-100.4059,"America/Chicago"],
+  ["Snyder, TX",32.7179,-100.9179,"America/Chicago"],
+  ["Big Spring, TX",32.2504,-101.4788,"America/Chicago"],
+  ["Andrews, TX",32.3182,-102.5479,"America/Chicago"],
+  ["Pecos, TX",31.4229,-103.4932,"America/Chicago"],
+  ["Fort Stockton, TX",30.8946,-102.8793,"America/Chicago"],
+  ["Alpine, TX",30.3585,-103.6613,"America/Chicago"],
+  ["Marfa, TX",30.3088,-104.0208,"America/Chicago"],
+  ["Presidio, TX",29.5608,-104.3668,"America/Chicago"],
+  ["Monahans, TX",31.5924,-102.8929,"America/Chicago"],
+  ["Kermit, TX",31.8582,-103.0879,"America/Chicago"],
+  ["Plainview, TX",34.1848,-101.7068,"America/Chicago"],
+  ["Levelland, TX",33.5873,-102.3779,"America/Chicago"],
+  ["Slaton, TX",33.4376,-101.6443,"America/Chicago"],
+  ["Post, TX",33.1882,-101.3793,"America/Chicago"],
+  ["Lamesa, TX",32.7376,-101.9527,"America/Chicago"],
+  ["Seminole, TX",32.7196,-102.6457,"America/Chicago"],
+  ["Tahoka, TX",33.1665,-101.7943,"America/Chicago"],
+  ["Lockney, TX",33.8776,-101.4407,"America/Chicago"],
+  ["Floydada, TX",33.9848,-101.3382,"America/Chicago"],
+  ["Crosbyton, TX",33.6593,-101.2393,"America/Chicago"],
+  ["Ralls, TX",33.6776,-101.3879,"America/Chicago"],
+  ["Lorenzo, TX",33.6693,-101.5365,"America/Chicago"],
+  ["Littlefield, TX",33.9165,-102.3265,"America/Chicago"],
+  ["Tulia, TX",34.5357,-101.7554,"America/Chicago"],
+  ["Childress, TX",34.4265,-100.2048,"America/Chicago"],
+  ["Pampa, TX",35.5362,-100.9601,"America/Chicago"],
+  ["Borger, TX",35.6679,-101.3963,"America/Chicago"],
+  ["Canadian, TX",35.9106,-100.3832,"America/Chicago"],
+  ["Perryton, TX",36.3995,-100.8026,"America/Chicago"],
+  ["Dalhart, TX",36.0598,-102.5143,"America/Chicago"],
+  ["Dumas, TX",35.8657,-101.9735,"America/Chicago"],
+  ["Hereford, TX",34.8148,-102.3979,"America/Chicago"],
+  ["Clovis, NM (near TX)",34.4048,-103.2052,"America/Denver"],
+  // ── US Military Bases ─────────────────────────────────────────────────────
+  ["Fort Bragg, NC",35.1390,-78.9930,"America/New_York"],
+  ["Fort Campbell, KY",36.6559,-87.4710,"America/Chicago"],
+  ["Fort Benning, GA",32.3598,-84.9899,"America/New_York"],
+  ["Fort Lewis, WA",47.1001,-122.5979,"America/Los_Angeles"],
+  ["Joint Base Lewis-McChord, WA",47.1001,-122.5979,"America/Los_Angeles"],
+  ["Fort Jackson, SC",34.0499,-80.9012,"America/New_York"],
+  ["Fort Stewart, GA",31.8696,-81.6094,"America/New_York"],
+  ["Fort Knox, KY",37.9012,-85.9627,"America/New_York"],
+  ["Fort Riley, KS",39.0557,-96.7816,"America/Chicago"],
+  ["Fort Irwin, CA",35.2626,-116.6891,"America/Los_Angeles"],
+  ["Fort Bliss, TX",31.8484,-106.3796,"America/Denver"],
+  ["Fort Wainwright, AK",64.8278,-147.6539,"America/Anchorage"],
+  ["Fort Richardson, AK",61.2649,-149.6778,"America/Anchorage"],
+  ["Fort Drum, NY",44.0537,-75.7693,"America/New_York"],
+  ["Fort Leonard Wood, MO",37.7293,-92.1384,"America/Chicago"],
+  ["Fort Polk, LA",31.0451,-93.2057,"America/Chicago"],
+  ["Fort Sill, OK",34.6498,-98.4082,"America/Chicago"],
+  ["Fort Huachuca, AZ",31.5479,-110.3447,"America/Phoenix"],
+  ["Fort Carson, CO",38.7342,-104.7852,"America/Denver"],
+  ["Fort Leavenworth, KS",39.3617,-94.9226,"America/Chicago"],
+  ["Fort Rucker, AL",31.3613,-85.7118,"America/Chicago"],
+  ["Redstone Arsenal, AL",34.6787,-86.6480,"America/Chicago"],
+  ["Joint Base San Antonio, TX",29.3844,-98.5811,"America/Chicago"],
+  ["Lackland AFB, TX",29.3844,-98.5811,"America/Chicago"],
+  ["Randolph AFB, TX",29.5297,-98.2789,"America/Chicago"],
+  ["Dyess AFB, TX",32.4208,-99.8462,"America/Chicago"],
+  ["Goodfellow AFB, TX",31.3584,-100.3961,"America/Chicago"],
+  ["Laughlin AFB, TX",29.3595,-100.7782,"America/Chicago"],
+  ["Sheppard AFB, TX",33.9888,-98.5014,"America/Chicago"],
+  ["Camp Mabry, TX",30.3127,-97.7754,"America/Chicago"],
+  ["Ellington Field, TX",29.6073,-95.1588,"America/Chicago"],
+  ["Naval Air Station Corpus Christi, TX",27.6926,-97.2883,"America/Chicago"],
+  ["Naval Air Station JRB Fort Worth, TX",32.7696,-97.4413,"America/Chicago"],
+  ["Kingsville NAS, TX",27.5072,-97.8097,"America/Chicago"],
+  // ── Rest of USA ───────────────────────────────────────────────────────────
+  ["New York, NY",40.7128,-74.0060,"America/New_York"],
+  ["Los Angeles, CA",34.0522,-118.2437,"America/Los_Angeles"],
+  ["Chicago, IL",41.8781,-87.6298,"America/Chicago"],
+  ["Phoenix, AZ",33.4484,-112.0740,"America/Phoenix"],
+  ["Philadelphia, PA",39.9526,-75.1652,"America/New_York"],
+  ["San Diego, CA",32.7157,-117.1611,"America/Los_Angeles"],
+  ["Jacksonville, FL",30.3322,-81.6557,"America/New_York"],
+  ["Columbus, OH",39.9612,-82.9988,"America/New_York"],
+  ["Charlotte, NC",35.2271,-80.8431,"America/New_York"],
+  ["San Francisco, CA",37.7749,-122.4194,"America/Los_Angeles"],
+  ["Indianapolis, IN",39.7684,-86.1581,"America/Indiana/Indianapolis"],
+  ["Seattle, WA",47.6062,-122.3321,"America/Los_Angeles"],
+  ["Denver, CO",39.7392,-104.9903,"America/Denver"],
+  ["Nashville, TN",36.1627,-86.7816,"America/Chicago"],
+  ["Oklahoma City, OK",35.4676,-97.5164,"America/Chicago"],
+  ["Washington, DC",38.9072,-77.0369,"America/New_York"],
+  ["Boston, MA",42.3601,-71.0589,"America/New_York"],
+  ["Las Vegas, NV",36.1699,-115.1398,"America/Los_Angeles"],
+  ["Memphis, TN",35.1495,-90.0490,"America/Chicago"],
+  ["Louisville, KY",38.2527,-85.7585,"America/Kentucky/Louisville"],
+  ["Baltimore, MD",39.2904,-76.6122,"America/New_York"],
+  ["Milwaukee, WI",43.0389,-87.9065,"America/Chicago"],
+  ["Albuquerque, NM",35.0844,-106.6504,"America/Denver"],
+  ["Tucson, AZ",32.2226,-110.9747,"America/Phoenix"],
+  ["Fresno, CA",36.7378,-119.7871,"America/Los_Angeles"],
+  ["Sacramento, CA",38.5816,-121.4944,"America/Los_Angeles"],
+  ["Kansas City, MO",39.0997,-94.5786,"America/Chicago"],
+  ["Atlanta, GA",33.7490,-84.3880,"America/New_York"],
+  ["Colorado Springs, CO",38.8339,-104.8214,"America/Denver"],
+  ["Raleigh, NC",35.7796,-78.6382,"America/New_York"],
+  ["Virginia Beach, VA",36.8529,-75.9780,"America/New_York"],
+  ["Minneapolis, MN",44.9778,-93.2650,"America/Chicago"],
+  ["Tampa, FL",27.9506,-82.4572,"America/New_York"],
+  ["New Orleans, LA",29.9511,-90.0715,"America/Chicago"],
+  ["Miami, FL",25.7617,-80.1918,"America/New_York"],
+  ["Detroit, MI",42.3314,-83.0458,"America/Detroit"],
+  ["Portland, OR",45.5051,-122.6750,"America/Los_Angeles"],
+  ["Cleveland, OH",41.4993,-81.6944,"America/New_York"],
+  ["Pittsburgh, PA",40.4406,-79.9959,"America/New_York"],
+  ["Cincinnati, OH",39.1031,-84.5120,"America/New_York"],
+  ["Orlando, FL",28.5383,-81.3792,"America/New_York"],
+  ["Salt Lake City, UT",40.7608,-111.8910,"America/Denver"],
+  ["Honolulu, HI",21.3069,-157.8583,"Pacific/Honolulu"],
+  ["Anchorage, AK",61.2181,-149.9003,"America/Anchorage"],
+  ["St. Louis, MO",38.6270,-90.1994,"America/Chicago"],
+  ["Huntsville, AL",34.7304,-86.5861,"America/Chicago"],
+  ["Augusta, GA",33.4735,-82.0105,"America/New_York"],
+  ["Fayetteville, NC",35.0527,-78.8784,"America/New_York"],
+  ["Savannah, GA",32.0809,-81.0912,"America/New_York"],
+  ["Clarksville, TN",36.5298,-87.3595,"America/Chicago"],
+  ["Killeen, TX",31.1171,-97.7278,"America/Chicago"],
+  ["Boise, ID",43.6150,-116.2023,"America/Boise"],
+  ["Spokane, WA",47.6588,-117.4260,"America/Los_Angeles"],
+  ["Tulsa, OK",36.1540,-95.9928,"America/Chicago"],
+  ["Buffalo, NY",42.8864,-78.8784,"America/New_York"],
+  ["Madison, WI",43.0731,-89.4012,"America/Chicago"],
+  ["Des Moines, IA",41.5868,-93.6250,"America/Chicago"],
+  ["Richmond, VA",37.5407,-77.4360,"America/New_York"],
+  ["Tacoma, WA",47.2529,-122.4443,"America/Los_Angeles"],
+  ["Providence, RI",41.8240,-71.4128,"America/New_York"],
+  ["Lexington, KY",38.0406,-84.5037,"America/New_York"],
+  ["Akron, OH",41.0814,-81.5190,"America/New_York"],
+  ["Aurora, CO",39.7294,-104.8319,"America/Denver"],
+  ["Anaheim, CA",33.8366,-117.9143,"America/Los_Angeles"],
+  ["Santa Ana, CA",33.7455,-117.8677,"America/Los_Angeles"],
+  ["Corpus Christi, TX",27.8006,-97.3964,"America/Chicago"],
+  ["Riverside, CA",33.9533,-117.3962,"America/Los_Angeles"],
+  ["St. Paul, MN",44.9537,-93.0900,"America/Chicago"],
+  ["Stockton, CA",37.9577,-121.2908,"America/Los_Angeles"],
+  ["St. Petersburg, FL",27.7731,-82.6397,"America/New_York"],
+  ["Toledo, OH",41.6528,-83.5379,"America/New_York"],
+  ["Greensboro, NC",36.0726,-79.7920,"America/New_York"],
+  ["Newark, NJ",40.7357,-74.1724,"America/New_York"],
+  ["Plano, TX",33.0198,-96.6989,"America/Chicago"],
+  ["Henderson, NV",36.0395,-114.9817,"America/Los_Angeles"],
+  ["Lincoln, NE",40.8136,-96.7026,"America/Chicago"],
+  ["Buffalo, NY",42.8864,-78.8784,"America/New_York"],
+  ["Fort Wayne, IN",41.1306,-85.1286,"America/Indiana/Indianapolis"],
+  ["Jersey City, NJ",40.7178,-74.0431,"America/New_York"],
+  ["Chula Vista, CA",32.6401,-117.0842,"America/Los_Angeles"],
+  ["Orlando, FL",28.5383,-81.3792,"America/New_York"],
+  ["St. Louis, MO",38.6270,-90.1994,"America/Chicago"],
+  ["Madison, WI",43.0731,-89.4012,"America/Chicago"],
+  ["Laredo, TX",27.5306,-99.4803,"America/Chicago"],
+  ["Norfolk, VA",36.8508,-76.2859,"America/New_York"],
+  ["Chandler, AZ",33.3062,-111.8413,"America/Phoenix"],
+  ["Lubbock, TX",33.5779,-101.8552,"America/Chicago"],
+  ["Durham, NC",35.9940,-78.8986,"America/New_York"],
+  ["Winston-Salem, NC",36.0999,-80.2442,"America/New_York"],
+  ["Garland, TX",32.9126,-96.6389,"America/Chicago"],
+  ["Glendale, AZ",33.5387,-112.1860,"America/Phoenix"],
+  ["Hialeah, FL",25.8576,-80.2781,"America/New_York"],
+  ["Reno, NV",39.5296,-119.8138,"America/Los_Angeles"],
+  ["Baton Rouge, LA",30.4515,-91.1871,"America/Chicago"],
+  ["Irvine, CA",33.6846,-117.8265,"America/Los_Angeles"],
+  ["Chesapeake, VA",36.7682,-76.2875,"America/New_York"],
+  ["Scottsdale, AZ",33.4942,-111.9261,"America/Phoenix"],
+  ["North Las Vegas, NV",36.1989,-115.1175,"America/Los_Angeles"],
+  ["Fremont, CA",37.5485,-121.9886,"America/Los_Angeles"],
+  ["Gilbert, AZ",33.3528,-111.7890,"America/Phoenix"],
+  ["San Bernardino, CA",34.1083,-117.2898,"America/Los_Angeles"],
+  ["Birmingham, AL",33.5207,-86.8025,"America/Chicago"],
+  ["Rochester, NY",43.1566,-77.6088,"America/New_York"],
+  ["Spokane, WA",47.6588,-117.4260,"America/Los_Angeles"],
+  ["Des Moines, IA",41.5868,-93.6250,"America/Chicago"],
+  ["Montgomery, AL",32.3668,-86.2999,"America/Chicago"],
+  ["Modesto, CA",37.6391,-120.9969,"America/Los_Angeles"],
+  ["Fontana, CA",34.0922,-117.4350,"America/Los_Angeles"],
+  ["Moreno Valley, CA",33.9425,-117.2297,"America/Los_Angeles"],
+  ["Glendale, CA",34.1425,-118.2551,"America/Los_Angeles"],
+  ["Shreveport, LA",32.5252,-93.7502,"America/Chicago"],
+  ["Akron, OH",41.0814,-81.5190,"America/New_York"],
+  ["Little Rock, AR",34.7465,-92.2896,"America/Chicago"],
+  ["Oxnard, CA",34.1975,-119.1771,"America/Los_Angeles"],
+  ["Augusta, GA",33.4735,-82.0105,"America/New_York"],
+  ["Columbia, SC",34.0007,-81.0348,"America/New_York"],
+  ["Jackson, MS",32.2988,-90.1848,"America/Chicago"],
+  ["Mobile, AL",30.6954,-88.0399,"America/Chicago"],
+  ["Grand Rapids, MI",42.9634,-85.6681,"America/Detroit"],
+  ["Knoxville, TN",35.9606,-83.9207,"America/New_York"],
+  ["Tallahassee, FL",30.4518,-84.2727,"America/New_York"],
+  ["Worcester, MA",42.2626,-71.8023,"America/New_York"],
+  ["Tempe, AZ",33.4255,-111.9400,"America/Phoenix"],
+  ["Cape Coral, FL",26.5629,-81.9495,"America/New_York"],
+  ["Sioux Falls, SD",43.5446,-96.7311,"America/Chicago"],
+  ["Brownsville, TX",25.9017,-97.4975,"America/Chicago"],
+  ["Oceanside, CA",33.1959,-117.3795,"America/Los_Angeles"],
+  ["Aurora, IL",41.7606,-88.3201,"America/Chicago"],
+  ["Eugene, OR",44.0521,-123.0868,"America/Los_Angeles"],
+  ["Peoria, AZ",33.5806,-112.2374,"America/Phoenix"],
+  ["Salem, OR",44.9429,-123.0351,"America/Los_Angeles"],
+  ["Springfield, MO",37.2153,-93.2982,"America/Chicago"],
+  ["McKinney, TX",33.1972,-96.6397,"America/Chicago"],
+  ["Fort Lauderdale, FL",26.1224,-80.1373,"America/New_York"],
+  ["Columbus, GA",32.4610,-84.9877,"America/New_York"],
+  ["Bridgeport, CT",41.1670,-73.2048,"America/New_York"],
+  ["Palmdale, CA",34.5794,-118.1165,"America/Los_Angeles"],
+  ["Hayward, CA",37.6688,-122.0808,"America/Los_Angeles"],
+  ["Sunnyvale, CA",37.3688,-122.0363,"America/Los_Angeles"],
+  ["Pomona, CA",34.0551,-117.7520,"America/Los_Angeles"],
+  ["Escondido, CA",33.1192,-117.0864,"America/Los_Angeles"],
+  ["Kansas City, KS",39.1142,-94.6275,"America/Chicago"],
+  ["Torrance, CA",33.8358,-118.3406,"America/Los_Angeles"],
+  ["Pasadena, CA",34.1478,-118.1445,"America/Los_Angeles"],
+  ["Naperville, IL",41.7508,-88.1535,"America/Chicago"],
+  ["Alexandria, VA",38.8048,-77.0469,"America/New_York"],
+  ["Lakewood, CO",39.7047,-105.0814,"America/Denver"],
+  ["Macon, GA",32.8407,-83.6324,"America/New_York"],
+  ["Murfreesboro, TN",35.8456,-86.3903,"America/Chicago"],
+  ["Paterson, NJ",40.9168,-74.1718,"America/New_York"],
+  ["Joliet, IL",41.5250,-88.0817,"America/Chicago"],
+  ["Savannah, GA",32.0809,-81.0912,"America/New_York"],
+  ["Killeen, TX",31.1171,-97.7278,"America/Chicago"],
+  // ── Illinois (comprehensive) ───────────────────────────────────────────────
+  ["Algonquin, IL",42.1653,-88.2834,"America/Chicago"],
+  ["Crystal Lake, IL",42.2411,-88.3162,"America/Chicago"],
+  ["McHenry, IL",42.3328,-88.2687,"America/Chicago"],
+  ["Elgin, IL",42.0354,-88.2826,"America/Chicago"],
+  ["Carpentersville, IL",42.1214,-88.2578,"America/Chicago"],
+  ["Huntley, IL",42.1681,-88.4284,"America/Chicago"],
+  ["Barrington, IL",42.1539,-88.1367,"America/Chicago"],
+  ["Palatine, IL",42.1103,-88.0342,"America/Chicago"],
+  ["Schaumburg, IL",42.0334,-88.0834,"America/Chicago"],
+  ["Arlington Heights, IL",42.0884,-87.9806,"America/Chicago"],
+  ["Naperville, IL",41.7508,-88.1535,"America/Chicago"],
+  ["Rockford, IL",42.2711,-89.0940,"America/Chicago"],
+  ["Peoria, IL",40.6936,-89.5890,"America/Chicago"],
+  ["Springfield, IL",39.7817,-89.6501,"America/Chicago"],
+  ["Joliet, IL",41.5250,-88.0817,"America/Chicago"],
+  ["Aurora, IL",41.7606,-88.3201,"America/Chicago"],
+  ["Waukegan, IL",42.3636,-87.8448,"America/Chicago"],
+  ["Cicero, IL",41.8456,-87.7539,"America/Chicago"],
+  ["Champaign, IL",40.1164,-88.2434,"America/Chicago"],
+  ["Bloomington, IL",40.4842,-88.9937,"America/Chicago"],
+  ["Decatur, IL",39.8403,-88.9548,"America/Chicago"],
+  ["Evanston, IL",42.0450,-87.6877,"America/Chicago"],
+  ["Bolingbrook, IL",41.6986,-88.0684,"America/Chicago"],
+  ["Downers Grove, IL",41.8081,-88.0111,"America/Chicago"],
+  ["Oak Park, IL",41.8850,-87.7845,"America/Chicago"],
+  ["Tinley Park, IL",41.5731,-87.7931,"America/Chicago"],
+  ["Orland Park, IL",41.6306,-87.8539,"America/Chicago"],
+  ["Waukegan, IL",42.3636,-87.8448,"America/Chicago"],
+  ["Glenview, IL",42.0697,-87.8278,"America/Chicago"],
+  ["Carol Stream, IL",41.9131,-88.1350,"America/Chicago"],
+  ["Wheaton, IL",41.8661,-88.1070,"America/Chicago"],
+  ["Bartlett, IL",41.9953,-88.1856,"America/Chicago"],
+  ["Romeoville, IL",41.6475,-88.0903,"America/Chicago"],
+  ["Hanover Park, IL",41.9994,-88.1434,"America/Chicago"],
+  ["Des Plaines, IL",42.0334,-87.8834,"America/Chicago"],
+  ["Mount Prospect, IL",42.0664,-87.9375,"America/Chicago"],
+  ["Hoffman Estates, IL",42.0631,-88.1431,"America/Chicago"],
+  ["Oak Lawn, IL",41.7197,-87.7478,"America/Chicago"],
+  ["Berwyn, IL",41.8506,-87.7939,"America/Chicago"],
+  ["Skokie, IL",42.0334,-87.7334,"America/Chicago"],
+  ["Roselle, IL",41.9853,-88.0817,"America/Chicago"],
+  ["Lake Zurich, IL",42.1978,-88.0870,"America/Chicago"],
+  ["Vernon Hills, IL",42.2214,-87.9667,"America/Chicago"],
+  ["Libertyville, IL",42.2806,-87.9528,"America/Chicago"],
+  ["Round Lake Beach, IL",42.3706,-88.0892,"America/Chicago"],
+  ["Gurnee, IL",42.3703,-87.9406,"America/Chicago"],
+  ["Zion, IL",42.4461,-87.8320,"America/Chicago"],
+  ["North Chicago, IL",42.3253,-87.8445,"America/Chicago"],
+  ["Lake Forest, IL",42.2586,-87.8403,"America/Chicago"],
+  ["Mundelein, IL",42.2631,-88.0042,"America/Chicago"],
+  ["Streamwood, IL",42.0225,-88.1781,"America/Chicago"],
+  ["South Elgin, IL",41.9939,-88.2959,"America/Chicago"],
+  ["St. Charles, IL",41.9142,-88.3081,"America/Chicago"],
+  ["Geneva, IL",41.8875,-88.3050,"America/Chicago"],
+  ["Batavia, IL",41.8500,-88.3123,"America/Chicago"],
+  ["Woodstock, IL",42.3147,-88.4487,"America/Chicago"],
+  ["Harvard, IL",42.4225,-88.6134,"America/Chicago"],
+  ["Marengo, IL",42.2486,-88.6073,"America/Chicago"],
+  // ── UK & Ireland ─────────────────────────────────────────────────────────
+  ["London, UK",51.5074,-0.1278,"Europe/London"],
+  ["Birmingham, UK",52.4862,-1.8904,"Europe/London"],
+  ["Manchester, UK",53.4808,-2.2426,"Europe/London"],
+  ["Glasgow, UK",55.8642,-4.2518,"Europe/London"],
+  ["Liverpool, UK",53.4084,-2.9916,"Europe/London"],
+  ["Edinburgh, UK",55.9533,-3.1883,"Europe/London"],
+  ["Bristol, UK",51.4545,-2.5879,"Europe/London"],
+  ["Leeds, UK",53.8008,-1.5491,"Europe/London"],
+  ["Cardiff, UK",51.4816,-3.1791,"Europe/London"],
+  ["Belfast, UK",54.5973,-5.9301,"Europe/London"],
+  ["Dublin, Ireland",53.3498,-6.2603,"Europe/Dublin"],
+  // ── Canada ────────────────────────────────────────────────────────────────
+  ["Toronto, Canada",43.6532,-79.3832,"America/Toronto"],
+  ["Montreal, Canada",45.5017,-73.5673,"America/Toronto"],
+  ["Vancouver, Canada",49.2827,-123.1207,"America/Vancouver"],
+  ["Calgary, Canada",51.0447,-114.0719,"America/Edmonton"],
+  ["Edmonton, Canada",53.5461,-113.4938,"America/Edmonton"],
+  ["Ottawa, Canada",45.4215,-75.6972,"America/Toronto"],
+  ["Winnipeg, Canada",49.8951,-97.1384,"America/Winnipeg"],
+  ["Halifax, Canada",44.6488,-63.5752,"America/Halifax"],
+  // ── Australia ─────────────────────────────────────────────────────────────
+  ["Sydney, Australia",-33.8688,151.2093,"Australia/Sydney"],
+  ["Melbourne, Australia",-37.8136,144.9631,"Australia/Melbourne"],
+  ["Brisbane, Australia",-27.4698,153.0251,"Australia/Brisbane"],
+  ["Perth, Australia",-31.9505,115.8605,"Australia/Perth"],
+  ["Adelaide, Australia",-34.9285,138.6007,"Australia/Adelaide"],
+  ["Canberra, Australia",-35.2809,149.1300,"Australia/Sydney"],
+  // ── Europe ────────────────────────────────────────────────────────────────
+  ["Paris, France",48.8566,2.3522,"Europe/Paris"],
+  ["Berlin, Germany",52.5200,13.4050,"Europe/Berlin"],
+  ["Madrid, Spain",40.4168,-3.7038,"Europe/Madrid"],
+  ["Rome, Italy",41.9028,12.4964,"Europe/Rome"],
+  ["Amsterdam, Netherlands",52.3676,4.9041,"Europe/Amsterdam"],
+  ["Vienna, Austria",48.2082,16.3738,"Europe/Vienna"],
+  ["Zurich, Switzerland",47.3769,8.5417,"Europe/Zurich"],
+  ["Stockholm, Sweden",59.3293,18.0686,"Europe/Stockholm"],
+  ["Oslo, Norway",59.9139,10.7522,"Europe/Oslo"],
+  ["Copenhagen, Denmark",55.6761,12.5683,"Europe/Copenhagen"],
+  ["Helsinki, Finland",60.1699,24.9384,"Europe/Helsinki"],
+  ["Warsaw, Poland",52.2297,21.0122,"Europe/Warsaw"],
+  ["Prague, Czech Republic",50.0755,14.4378,"Europe/Prague"],
+  ["Budapest, Hungary",47.4979,19.0402,"Europe/Budapest"],
+  ["Athens, Greece",37.9838,23.7275,"Europe/Athens"],
+  ["Lisbon, Portugal",38.7223,-9.1393,"Europe/Lisbon"],
+  ["Barcelona, Spain",41.3851,2.1734,"Europe/Madrid"],
+  ["Munich, Germany",48.1351,11.5820,"Europe/Berlin"],
+  ["Istanbul, Turkey",41.0082,28.9784,"Europe/Istanbul"],
+  ["Moscow, Russia",55.7558,37.6173,"Europe/Moscow"],
+  // ── Asia / Pacific ────────────────────────────────────────────────────────
+  ["Tokyo, Japan",35.6762,139.6503,"Asia/Tokyo"],
+  ["Osaka, Japan",34.6937,135.5023,"Asia/Tokyo"],
+  ["Beijing, China",39.9042,116.4074,"Asia/Shanghai"],
+  ["Shanghai, China",31.2304,121.4737,"Asia/Shanghai"],
+  ["Hong Kong",22.3193,114.1694,"Asia/Hong_Kong"],
+  ["Seoul, South Korea",37.5665,126.9780,"Asia/Seoul"],
+  ["Mumbai, India",19.0760,72.8777,"Asia/Kolkata"],
+  ["Delhi, India",28.7041,77.1025,"Asia/Kolkata"],
+  ["Bangalore, India",12.9716,77.5946,"Asia/Kolkata"],
+  ["Chennai, India",13.0827,80.2707,"Asia/Kolkata"],
+  ["Kolkata, India",22.5726,88.3639,"Asia/Kolkata"],
+  ["Singapore",1.3521,103.8198,"Asia/Singapore"],
+  ["Bangkok, Thailand",13.7563,100.5018,"Asia/Bangkok"],
+  ["Jakarta, Indonesia",-6.2088,106.8456,"Asia/Jakarta"],
+  ["Kuala Lumpur, Malaysia",3.1390,101.6869,"Asia/Kuala_Lumpur"],
+  ["Manila, Philippines",14.5995,120.9842,"Asia/Manila"],
+  ["Dubai, UAE",25.2048,55.2708,"Asia/Dubai"],
+  ["Riyadh, Saudi Arabia",24.7136,46.6753,"Asia/Riyadh"],
+  ["Tehran, Iran",35.6892,51.3890,"Asia/Tehran"],
+  ["Cairo, Egypt",30.0444,31.2357,"Africa/Cairo"],
+  // ── Latin America ─────────────────────────────────────────────────────────
+  ["Mexico City, Mexico",19.4326,-99.1332,"America/Mexico_City"],
+  ["São Paulo, Brazil",-23.5505,-46.6333,"America/Sao_Paulo"],
+  ["Buenos Aires, Argentina",-34.6037,-58.3816,"America/Argentina/Buenos_Aires"],
+  ["Bogotá, Colombia",4.7110,-74.0721,"America/Bogota"],
+  ["Lima, Peru",-12.0464,-77.0428,"America/Lima"],
+  ["Santiago, Chile",-33.4489,-70.6693,"America/Santiago"],
+  ["Havana, Cuba",23.1136,-82.3666,"America/Havana"],
+  // ── Africa ───────────────────────────────────────────────────────────────
+  ["Lagos, Nigeria",6.5244,3.3792,"Africa/Lagos"],
+  ["Nairobi, Kenya",-1.2921,36.8219,"Africa/Nairobi"],
+  ["Johannesburg, South Africa",-26.2041,28.0473,"Africa/Johannesburg"],
+  ["Cape Town, South Africa",-33.9249,18.4241,"Africa/Johannesburg"],
+];
+
+// ── Zip code table: US zips → [lat, lon, city, state, tz] ────────────────────
+// Key Texas zips + common ones
+const ZIPS = {
+  "76544": [31.1171,-97.7278,"Killeen","TX","America/Chicago"],
+  "76541": [31.1337,-97.7506,"Killeen","TX","America/Chicago"],
+  "76542": [31.0835,-97.7447,"Killeen","TX","America/Chicago"],
+  "76543": [31.1502,-97.7103,"Killeen","TX","America/Chicago"],
+  "76545": [31.1348,-97.7781,"Fort Hood","TX","America/Chicago"],
+  "76546": [31.1348,-97.7781,"Fort Hood","TX","America/Chicago"],
+  "76522": [31.0563,-97.4653,"Belton","TX","America/Chicago"],
+  "76513": [31.0982,-97.3428,"Temple","TX","America/Chicago"],
+  "76501": [31.0982,-97.3428,"Temple","TX","America/Chicago"],
+  "76502": [31.0982,-97.3428,"Temple","TX","America/Chicago"],
+  "76508": [31.0553,-97.3756,"Holland","TX","America/Chicago"],
+  "76520": [30.8582,-97.0864,"Cameron","TX","America/Chicago"],
+  "76526": [31.0349,-97.6672,"Copperas Cove","TX","America/Chicago"],
+  "76528": [31.1218,-97.9036,"Copperas Cove","TX","America/Chicago"],
+  "76527": [30.7219,-97.6864,"Florence","TX","America/Chicago"],
+  "76530": [30.7041,-97.5786,"Granger","TX","America/Chicago"],
+  "76534": [30.7766,-97.2228,"Holland","TX","America/Chicago"],
+  "76537": [30.7188,-97.8678,"Jarrell","TX","America/Chicago"],
+  "76548": [31.0804,-97.6500,"Harker Heights","TX","America/Chicago"],
+  "76549": [31.0804,-97.6500,"Harker Heights","TX","America/Chicago"],
+  "76554": [30.9788,-97.4586,"Little River-Academy","TX","America/Chicago"],
+  "76557": [31.0349,-97.2628,"Moody","TX","America/Chicago"],
+  "76559": [31.0804,-97.5000,"Nolanville","TX","America/Chicago"],
+  "76561": [31.1349,-97.5436,"Oglesby","TX","America/Chicago"],
+  "76564": [30.8016,-97.1156,"Rockdale","TX","America/Chicago"],
+  "76566": [31.3252,-97.9178,"Purmela","TX","America/Chicago"],
+  "76567": [30.8016,-97.1156,"Rockdale","TX","America/Chicago"],
+  "76569": [30.9402,-97.0836,"Rogers","TX","America/Chicago"],
+  "76570": [31.1024,-97.0503,"Rosebud","TX","America/Chicago"],
+  "76571": [30.9124,-97.5364,"Salado","TX","America/Chicago"],
+  "76574": [30.5469,-97.4061,"Taylor","TX","America/Chicago"],
+  "76577": [30.6802,-97.2053,"Thorndale","TX","America/Chicago"],
+  "76578": [30.5386,-97.2039,"Thrall","TX","America/Chicago"],
+  "76579": [31.0349,-97.4947,"Troy","TX","America/Chicago"],
+  "76596": [31.4349,-97.7431,"Gatesville","TX","America/Chicago"],
+  "76597": [31.4349,-97.7431,"Gatesville","TX","America/Chicago"],
+  "76598": [31.4349,-97.7431,"Gatesville","TX","America/Chicago"],
+  "76599": [31.4349,-97.7431,"Gatesville","TX","America/Chicago"],
+  "76655": [31.5493,-97.1467,"Waco","TX","America/Chicago"],
+  "76701": [31.5493,-97.1467,"Waco","TX","America/Chicago"],
+  "78701": [30.2672,-97.7431,"Austin","TX","America/Chicago"],
+  "78201": [29.4241,-98.4936,"San Antonio","TX","America/Chicago"],
+  "77001": [29.7604,-95.3698,"Houston","TX","America/Chicago"],
+  "75201": [32.7767,-96.7970,"Dallas","TX","America/Chicago"],
+  "76101": [32.7555,-97.3308,"Fort Worth","TX","America/Chicago"],
+  "10001": [40.7484,-73.9967,"New York","NY","America/New_York"],
+  "90001": [33.9731,-118.2479,"Los Angeles","CA","America/Los_Angeles"],
+  "60601": [41.8858,-87.6181,"Chicago","IL","America/Chicago"],
+  "30301": [33.7490,-84.3880,"Atlanta","GA","America/New_York"],
+  "98101": [47.6062,-122.3321,"Seattle","WA","America/Los_Angeles"],
+  "80201": [39.7392,-104.9903,"Denver","CO","America/Denver"],
+  "85001": [33.4484,-112.0740,"Phoenix","AZ","America/Phoenix"],
+  "33101": [25.7617,-80.1918,"Miami","FL","America/New_York"],
+  "02101": [42.3601,-71.0589,"Boston","MA","America/New_York"],
+  "20001": [38.9072,-77.0369,"Washington","DC","America/New_York"],
+};
+
+// ── Search logic ──────────────────────────────────────────────────────────────
+let geoCache = null, debounce = null, results = [], hiIdx = -1;
+
+function onLocInput() {
+  clearTimeout(debounce);
+  const v = document.getElementById('locInput').value.trim();
+  geoCache = null;
+  setSt('', '');
+  if (v.length < 2) { hideSugs(); return; }
+  debounce = setTimeout(() => doSearch(v), 200);
+}
+
+function doSearch(q) {
+  const clean = q.toLowerCase().replace(/[.,]/g,' ').trim();
+
+  // 1. Zip code exact match
+  if (/^\d{5}$/.test(clean) && ZIPS[clean]) {
+    const z = ZIPS[clean];
+    results = [{ name:`${z[2]}, ${z[3]}`, detail:`Zip ${clean}`, lat:z[0], lon:z[1], tz:z[4] }];
+    showSugs(); return;
+  }
+
+  // 2. Fuzzy DB search — score each entry
+  const words = clean.split(/\s+/).filter(Boolean);
+  const scored = [];
+  for (const row of DB) {
+    const n = row[0].toLowerCase();
+    let score = 0;
+    for (const w of words) { if (n.includes(w)) score += w.length; }
+    if (score > 0) scored.push({ name:row[0], detail:'', lat:row[1], lon:row[2], tz:row[3], score, exact: n.startsWith(clean) });
+  }
+  scored.sort((a,b) => (b.exact - a.exact) || (b.score - a.score));
+  results = scored.slice(0,8);
+
+  if (results.length) { showSugs(); setSt('',''); }
+  else { hideSugs(); setSt('Not found — try spelling it differently, or use a nearby larger city', 'err'); }
+}
+
+function showSugs() {
+  const box = document.getElementById('sugs');
+  hiIdx = -1;
+  box.innerHTML = results.map((r,i)=>
+    `<div class="sug-item" onclick="pickResult(${i})">
+      <div class="sug-main">${r.name}</div>
+      ${r.detail ? `<div class="sug-sub">${r.detail}</div>` : ''}
+    </div>`).join('');
+  box.style.display = 'block';
+}
+
+function hideSugs() { document.getElementById('sugs').style.display='none'; hiIdx=-1; }
+
+function pickResult(i) {
+  const r = results[i];
+  geoCache = { name:r.name, lat:r.lat, lon:r.lon, tz:r.tz };
+  document.getElementById('locInput').value = r.name;
+  hideSugs();
+  setSt(`✓ ${r.name} · ${r.lat.toFixed(2)}°, ${r.lon.toFixed(2)}°`, 'ok');
+}
+
+function onLocKey(e) {
+  const items = document.querySelectorAll('.sug-item');
+  if (!items.length) return;
+  if (e.key==='ArrowDown') { e.preventDefault(); hiIdx=Math.min(hiIdx+1,items.length-1); highlight(items); }
+  else if (e.key==='ArrowUp') { e.preventDefault(); hiIdx=Math.max(hiIdx-1,0); highlight(items); }
+  else if (e.key==='Enter' && hiIdx>=0) { e.preventDefault(); pickResult(hiIdx); }
+  else if (e.key==='Escape') hideSugs();
+}
+function highlight(items) { items.forEach((el,i)=>el.classList.toggle('hi',i===hiIdx)); }
+
+document.addEventListener('click', e => { if(!e.target.closest('.loc-wrap')) hideSugs(); });
+
+function setSt(msg, cls) {
+  const el = document.getElementById('locSt');
+  el.textContent = msg; el.className = 'loc-status' + (cls?' '+cls:'');
+}
+
+function toggleManual() {
+  const d = document.getElementById('manualCoords');
+  d.classList.toggle('open');
+}
+
+function useManual() {
+  const lat = parseFloat(document.getElementById('manLat').value);
+  const lon = parseFloat(document.getElementById('manLon').value);
+  const name = document.getElementById('manName').value.trim() || 'Custom location';
+  const tz = document.getElementById('manTz').value.trim() || 'America/Chicago';
+  if (isNaN(lat)||isNaN(lon)) { alert('Please enter valid latitude and longitude numbers.'); return; }
+  geoCache = { name, lat, lon, tz };
+  document.getElementById('locInput').value = name;
+  setSt(`✓ ${name} · ${lat.toFixed(2)}°, ${lon.toFixed(2)}°`, 'ok');
+  document.getElementById('manualCoords').classList.remove('open');
+}
+
+// ── Astrology calculations ────────────────────────────────────────────────────
+const SIGNS=['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+
+function getSunSign(m,d){const c=[20,19,21,20,21,21,23,23,23,23,22,22];return d>=c[m-1]?SIGNS[m-1]:SIGNS[(m+10)%12];}
+
+function jd(yr,mo,dy,h){if(mo<=2){yr--;mo+=12;}const A=Math.floor(yr/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(yr+4716))+Math.floor(30.6001*(mo+1))+dy+B-1524.5+h/24;}
+
+function moonLon(j){
+  const T=(j-2451545)/36525;
+  let L=218.3164477+481267.88123421*T-0.0015786*T*T+T*T*T/538841-T*T*T*T/65194000;
+  const M=(357.5291092+35999.0502909*T)*Math.PI/180;
+  const Mp=(134.9633964+477198.8675055*T+0.0087414*T*T)*Math.PI/180;
+  const D=(297.8501921+445267.1114034*T-0.0018819*T*T)*Math.PI/180;
+  const F=(93.2720950+483202.0175233*T-0.0036539*T*T)*Math.PI/180;
+  const dL=6288774*Math.sin(Mp)+1274027*Math.sin(2*D-Mp)+658314*Math.sin(2*D)+213618*Math.sin(2*Mp)
+    -185116*Math.sin(M)-114332*Math.sin(2*F)+58793*Math.sin(2*D-2*Mp)+57066*Math.sin(2*D-M-Mp)
+    +53322*Math.sin(2*D+Mp)+45758*Math.sin(2*D-M)-40923*Math.sin(M-Mp)-34720*Math.sin(D)
+    -30383*Math.sin(M+Mp)+15327*Math.sin(2*D-2*F)-12528*Math.sin(Mp+2*F)+10980*Math.sin(Mp-2*F)
+    +10675*Math.sin(4*D-Mp)+10034*Math.sin(3*Mp)+8548*Math.sin(4*D-2*Mp)-7888*Math.sin(2*D+M-Mp)
+    -6766*Math.sin(2*D+M)-5163*Math.sin(D-Mp);
+  return(((L+dL/1e6)%360)+360)%360;
+}
+
+function getMoonSign(yr,mo,dy,h){return SIGNS[Math.floor(moonLon(jd(yr,mo,dy,h))/30)];}
+
+function getRising(yr,mo,dy,h,lat,lon){
+  var J=jd(yr,mo,dy,h),T=(J-2451545.0)/36525;
+  var GMST=280.46061837+360.98564736629*(J-2451545)+0.000387933*T*T-T*T*T/38710000;
+  var LST=((GMST+lon)%360+360)%360;
+  var eps=23.4392911*Math.PI/180, la=lat*Math.PI/180;
+  function lstForLam(d){
+    var r=d*Math.PI/180;
+    var RA=((Math.atan2(Math.sin(r)*Math.cos(eps),Math.cos(r)))*180/Math.PI+360)%360;
+    var Dec=Math.asin(Math.sin(r)*Math.sin(eps));
+    var c=-Math.tan(la)*Math.tan(Dec);
+    if(Math.abs(c)>1)return null;
+    return ((RA-Math.acos(c)*180/Math.PI)%360+360)%360;
+  }
+  function cd(a,b){var d=(a-b+360)%360;return d<=180?d:d-360;}
+  var lo=0,hi=360;
+  for(var i=0;i<60;i++){
+    var mid=(lo+hi)/2,lLo=lstForLam(lo),lMid=lstForLam(mid);
+    if(lLo===null||lMid===null){lo=mid;continue;}
+    if(cd(LST,lLo)*cd(LST,lMid)<0)hi=mid; else lo=mid;
+  }
+  return SIGNS[Math.floor(((lo+hi)/2)/30)%12];
+}
+
+function getTzOff(tz,ds){
+  try{const d=new Date(ds+'T12:00:00'),l=new Date(d.toLocaleString('en-US',{timeZone:tz})),u=new Date(d.toLocaleString('en-US',{timeZone:'UTC'}));return(l-u)/3600000;}
+  catch(e){const m=tz.match(/Etc\/GMT([+-])(\d+)/);if(m)return(m[1]==='-'?1:-1)*+m[2];return 0;}
+}
+
+// ── Sign data ──────────────────────────────────────────────────────────────────
+const SD={
+  Aries:      {glyph:'♈',chakra:'Solar Plexus',cc:'#f59e0b',cb:'rgba(245,158,11,0.2)',tools:'Red & orange crystals, physical movement, sun salutation'},
+  Taurus:     {glyph:'♉',chakra:'Heart',       cc:'#10b981',cb:'rgba(16,185,129,0.2)', tools:'Rose quartz, green aventurine, grounding walks, gardening'},
+  Gemini:     {glyph:'♊',chakra:'Throat',      cc:'#3b82f6',cb:'rgba(59,130,246,0.2)', tools:'Blue crystals, journaling, chanting, breathwork'},
+  Cancer:     {glyph:'♋',chakra:'Sacral',      cc:'#f97316',cb:'rgba(249,115,22,0.2)', tools:'Orange moonstone, dance, water ritual, creative arts'},
+  Leo:        {glyph:'♌',chakra:'Solar Plexus',cc:'#f59e0b',cb:'rgba(245,158,11,0.2)',tools:"Citrine, tiger's eye, heart-opening yoga, fire ceremony"},
+  Virgo:      {glyph:'♍',chakra:'Throat',      cc:'#3b82f6',cb:'rgba(59,130,246,0.2)', tools:'Blue lace agate, sound bowls, forest walks, ritual cleansing'},
+  Libra:      {glyph:'♎',chakra:'Heart',       cc:'#10b981',cb:'rgba(16,185,129,0.2)', tools:'Jade, rose quartz, heart coherence breathing, beauty rituals'},
+  Scorpio:    {glyph:'♏',chakra:'Sacral',      cc:'#f97316',cb:'rgba(249,115,22,0.2)', tools:'Garnet, obsidian, deep water meditation, shadow work journaling'},
+  Sagittarius:{glyph:'♐',chakra:'Solar Plexus',cc:'#f59e0b',cb:'rgba(245,158,11,0.2)',tools:'Yellow sapphire, sunstone, vision boarding, open-air meditation'},
+  Capricorn:  {glyph:'♑',chakra:'Root',        cc:'#ef4444',cb:'rgba(239,68,68,0.2)',  tools:'Red jasper, smoky quartz, barefoot earthing, ancestor ritual'},
+  Aquarius:   {glyph:'♒',chakra:'Crown',       cc:'#8b5cf6',cb:'rgba(139,92,246,0.2)',tools:'Amethyst, clear quartz, stargazing, breathwork, group ceremony'},
+  Pisces:     {glyph:'♓',chakra:'Third Eye',   cc:'#6366f1',cb:'rgba(99,102,241,0.2)',tools:'Lapis lazuli, fluorite, dream journaling, guided visualization'},
+};
+
+function cardHTML(sign,role,cls){const d=SD[sign];return`<div class="sign-card ${cls}"><div class="role">${role}</div><span class="sign-glyph">${d.glyph}</span><div class="sign-name">${sign}</div><span class="chakra-badge" style="background:${d.cb};color:${d.cc};border:1px solid ${d.cc}66">${d.chakra} Chakra</span></div>`;}
+
+// ── UI ────────────────────────────────────────────────────────────────────────
+function setPips(s){for(let i=0;i<3;i++)document.getElementById('p'+i).className='pip'+(i<s?' done':i===s?' active':'');}
+function showErr(m){document.getElementById('errMsg').innerHTML=`<div class="error-msg">${m}</div>`;}
+function goBack(){document.getElementById('step1').style.display='none';document.getElementById('step0').style.display='block';document.getElementById('errMsg').innerHTML='';setPips(0);}
+
+async function calculate(){
+  document.getElementById('errMsg').innerHTML='';
+  const bd=document.getElementById('bdate').value,bt=document.getElementById('btime').value;
+  if(!bd){showErr('Enter your date of birth.');return;}
+  if(!bt){showErr('Birth time is needed for accurate Moon and Rising signs.');return;}
+  if(!geoCache){showErr('Type your birth location and select it from the list, or enter coordinates manually.');return;}
+  const btn=document.getElementById('calcBtn');
+  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>Calculating your blueprint...';
+  const [yr,mo,dy]=bd.split('-').map(Number),[hr,mn]=bt.split(':').map(Number);
+  const lh=hr+mn/60,off=getTzOff(geoCache.tz,bd);
+  let uh=lh-off,ud=dy,um=mo,uy=yr;
+  if(uh<0){uh+=24;ud--;if(ud<1){um--;if(um<1){um=12;uy--;}ud=new Date(uy,um,0).getDate();}}
+  if(uh>=24){uh-=24;ud++;const dim=new Date(uy,um,0).getDate();if(ud>dim){ud=1;um++;if(um>12){um=1;uy++;}}}
+  const sun=getSunSign(mo,dy),moon=getMoonSign(uy,um,ud,uh),rising=getRising(uy,um,ud,uh,geoCache.lat,geoCache.lon);
+  document.getElementById('step0').style.display='none';
+  document.getElementById('step1').style.display='block';
+  setPips(1);
+  document.getElementById('locPill').innerHTML=`<span class="loc-pill">✦ ${geoCache.name} · ${geoCache.lat.toFixed(2)}°, ${geoCache.lon.toFixed(2)}°</span>`;
+  document.getElementById('signTrio').innerHTML=cardHTML(sun,'Sun Sign','sun')+cardHTML(moon,'Moon Sign','moon')+cardHTML(rising,'Rising Sign','rising');
+  await loadAI(sun,moon,rising,geoCache.name);
+  btn.disabled=false;btn.innerHTML='✦ Reveal My Cosmic Blueprint ✦';
+}
+
+async function loadAI(sun,moon,rising,city){
+  const sd=SD[sun],md=SD[moon],rd=SD[rising];
+  const p=`You are a mystical chakra astrology guide. Client born in ${city}. Sun:${sun}(${sd.chakra} Chakra). Moon:${moon}(${md.chakra} Chakra). Rising:${rising}(${rd.chakra} Chakra). Respond ONLY with valid JSON:{"sunGift":"2-3 sentences on survival gift through ${sd.chakra} Chakra as ${sun}","sunInBalance":"3 signs of balance","sunOutBalance":"3 signs out of balance","moonPurpose":"2-3 sentences on soul purpose Moon in ${moon}","moonThrive":"3 practices or environments to flourish","risingFlow":"2 sentences on moving through the world Rising ${rising}","seasonalWisdom":[{"season":"Sun in ${sun}","color":"#f59e0b","guidance":"one sentence"},{"season":"Sun in ${moon}","color":"#a78bfa","guidance":"one sentence"},{"season":"Sun in ${rising}","color":"#34d399","guidance":"one sentence"}],"integratedMessage":"2-3 sentences unifying all three"}`;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:p}]})});
+    const d=await r.json(),t=d.content.map(b=>b.text||'').join('');
+    renderReading(sun,moon,rising,JSON.parse(t.replace(/```json|```/g,'').trim()));
+  }catch(e){renderFallback(sun,moon,rising);}
+}
+
+function renderReading(sun,moon,rising,ai){
+  const sd=SD[sun];
+  document.getElementById('aiContent').innerHTML=`
+    <div class="insight-box"><div class="section-title">☀️ Sun in ${sun} — Your Survival Gift</div>
+    <p class="insight-text">${ai.sunGift}</p>
+    <div class="balance-grid">
+      <div class="balance-item in"><div class="b-title">✓ In Balance</div><div class="b-text">${ai.sunInBalance}</div></div>
+      <div class="balance-item out"><div class="b-title">⚠ Out of Balance</div><div class="b-text">${ai.sunOutBalance}</div></div>
+    </div>
+    <div style="margin-top:12px"><div class="b-title" style="color:#a78bfa;margin-bottom:4px">✦ Tools &amp; Allies</div>
+    <div class="tools-list">${sd.tools.split(',').map(t=>`<span class="tool-tag">${t.trim()}</span>`).join('')}</div></div></div>
+    <div class="insight-box"><div class="section-title">🌙 Moon in ${moon} — Your Purpose</div>
+    <p class="insight-text">${ai.moonPurpose}</p>
+    <p style="font-size:13px;color:var(--text-muted);line-height:1.75;margin-top:12px">${ai.moonThrive}</p></div>
+    <div class="insight-box"><div class="section-title">⬆ Rising ${rising} — Your Seasonal Flow</div>
+    <p class="insight-text">${ai.risingFlow}</p></div>
+    <div class="insight-box"><div class="section-title">🌀 Seasonal Activations</div>
+    <div class="season-flow">${ai.seasonalWisdom.map(s=>`<div class="season-item"><div class="season-dot" style="background:${s.color}"></div><div><div class="season-name">${s.season}</div><div class="season-desc">${s.guidance}</div></div></div>`).join('')}</div></div>
+    <div class="truth-box"><div class="truth-title">✦ Your Integrated Truth ✦</div>
+    <p class="truth-text">${ai.integratedMessage}</p></div>`;
+  setPips(2);
+}
+
+function renderFallback(sun,moon,rising){
+  document.getElementById('aiContent').innerHTML=`
+    <div class="insight-box"><div class="section-title">☀️ Sun in ${sun} — ${SD[sun].chakra} Chakra</div>
+    <div class="tools-list">${SD[sun].tools.split(',').map(t=>`<span class="tool-tag">${t.trim()}</span>`).join('')}</div></div>
+    <div class="insight-box"><div class="section-title">🌙 Moon in ${moon}</div>
+    <p class="insight-text">Your ${SD[moon].chakra} Chakra Moon guides your emotional truth and soul path.</p></div>
+    <div class="insight-box"><div class="section-title">⬆ Rising ${rising}</div>
+    <p class="insight-text">Your ${SD[rising].chakra} Chakra Rising shapes how you enter each new season.</p></div>`;
+  setPips(2);
+}
+</script>
+</body>
+</html>

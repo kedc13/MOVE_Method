@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MOVE YO LIFE — A Guide to Moving Through Life's Seasons · 2026</title>
+<meta name="description" content="Your 2026 chakra season guide — new moon intentions, full moon check-ins, and the lesson of each season." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  body { min-height: 100vh; background: #F7F2E7; color: #3A2E26; font-family: 'Jost', sans-serif; }
+
+  /* ---- header ---- */
+  header { text-align: center; padding: 40px 20px 8px; }
+  .crest { display: flex; align-items: center; justify-content: center; gap: 18px; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: clamp(30px, 6vw, 44px);
+       letter-spacing: 0.14em; color: #3A2E26; }
+  .rule { width: 180px; height: 1px; background: #C9A24B; margin: 10px auto 8px; opacity: 0.6; }
+  .subtitle { font-size: 11px; letter-spacing: 0.28em; color: #8A7A64; }
+
+  /* ---- hero card ---- */
+  .card { max-width: 720px; width: calc(100% - 32px); margin: 24px auto; background: #FFFDF8;
+          border-radius: 14px; padding: 26px 22px 24px; box-shadow: 0 2px 18px rgba(90,70,40,0.08);
+          text-align: center; }
+  .eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #A6987F; }
+  .season-head { display: flex; align-items: center; justify-content: center; gap: 16px;
+                 margin: 10px 0 4px; flex-wrap: wrap; }
+  .season-head > div { text-align: left; }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(26px, 5vw, 34px); font-weight: 600;
+       letter-spacing: 0.04em; }
+  .chakra-line { font-size: 13px; color: #8A7A64; margin-top: 2px; letter-spacing: 0.06em; }
+  .phase-pill { display: inline-block; padding: 7px 18px; border-radius: 999px; font-size: 12px;
+                letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; margin-top: 6px;
+                color: #4A3C30; }
+  .phase-note { font-size: 14.5px; color: #5C4F41; max-width: 460px; margin: 10px auto 0; line-height: 1.55; }
+
+  .connect-box { background: #F9F4E9; border-radius: 10px; padding: 16px 18px; margin: 20px auto 0; max-width: 560px; }
+  .connect-head { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 8px; }
+  .connect-title { font-size: 11px; letter-spacing: 0.22em; color: #8A7A64; }
+  .connect-text { font-size: 14px; line-height: 1.65; color: #4A3C30; }
+
+  .lesson-box { margin-top: 16px; padding: 16px 18px; border-top: 1px solid #EAE0CE; }
+  .lesson-label { font-size: 11px; letter-spacing: 0.22em; color: #7E8F6E; margin-bottom: 8px; }
+  .lesson-text { font-family: 'Cormorant Garamond', serif; font-size: 19px; line-height: 1.55;
+                 font-style: italic; color: #3A2E26; max-width: 540px; margin: 0 auto; }
+
+  /* ---- timeline ---- */
+  .timeline { max-width: 720px; margin: 0 auto; padding: 8px 16px 48px; }
+  h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; text-align: center;
+       margin: 26px 0 4px; letter-spacing: 0.06em; }
+  .timeline-sub { text-align: center; font-size: 13px; color: #8A7A64; margin-bottom: 22px; }
+  .spine-wrap { position: relative; }
+  .spine { position: absolute; left: 26px; top: 10px; bottom: 10px; width: 1px;
+           background: repeating-linear-gradient(#D8CBB2 0 3px, transparent 3px 8px); }
+
+  .season-row { position: relative; padding-left: 58px; margin-bottom: 10px; }
+  .row-orb { position: absolute; left: 12px; top: 14px; }
+  .row-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+             text-align: left; padding: 13px 14px; border-radius: 10px; border: 1px solid #EAE0CE;
+             background: transparent; cursor: pointer; font-family: inherit; font-size: inherit;
+             color: inherit; transition: background 0.15s; }
+  .row-btn:hover { background: #FBF7EE; }
+  .row-btn:focus-visible { outline: 2px solid #C9A24B; outline-offset: 2px; }
+  .row-meta { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .row-theme { font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; font-size: 14px; }
+  .row-chakra { font-size: 12.5px; color: #8A7A64; }
+  .row-date { font-size: 12.5px; color: #A6987F; letter-spacing: 0.04em; }
+  .now-tag { color: #FFFDF8; font-size: 10px; letter-spacing: 0.16em; padding: 3px 9px; border-radius: 999px; }
+  .done-tag { color: #A6987F; font-size: 12px; }
+  .chev { color: #B7A88E; font-size: 20px; line-height: 1; transition: transform 0.15s; flex-shrink: 0; }
+  .row-btn[aria-expanded="true"] .chev { transform: rotate(90deg); }
+
+  .detail { background: #FFFDF8; border: 1px solid #EAE0CE; border-top: none; border-radius: 0 0 10px 10px;
+            padding: 16px 16px 14px; margin-top: -6px; display: grid; gap: 12px; }
+  .detail-row { display: flex; gap: 12px; align-items: flex-start; text-align: left; }
+  .detail-head { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #6B5B49;
+                 margin-bottom: 3px; font-weight: 500; }
+  .detail-body { font-size: 13.5px; line-height: 1.6; color: #4A3C30; }
+  .detail-lesson { text-align: left; padding-left: 12px; }
+
+  footer { text-align: center; padding: 10px 20px 46px; font-size: 10.5px; letter-spacing: 0.14em; color: #8A7A64; }
+  .footer-quote { margin-top: 10px; font-style: italic; font-family: 'Cormorant Garamond', serif;
+                  font-size: 15px; letter-spacing: normal; }
+
+  /* ---- orb ---- */
+  .orb { border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .orb-ring { border-radius: 50%; border: 1.5px solid rgba(255,253,248,0.9);
+              display: flex; align-items: center; justify-content: center; }
+  .orb-dot { border-radius: 50%; background: #FFFDF8; }
+  svg { flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------- Data (from the Move Yo Life 2026 guide) ---------- */
+
+const CHAKRAS = {
+  root:    { name: "Root",         color: "#A8442E", soft: "#F4E2DA" },
+  sacral:  { name: "Sacral",       color: "#C75B2E", soft: "#F7E4D6" },
+  solar:   { name: "Solar Plexus", color: "#CE8F22", soft: "#F8ECD3" },
+  heart:   { name: "Heart",        color: "#7E8F6E", soft: "#E9EDE2" },
+  throat:  { name: "Throat",       color: "#54718E", soft: "#E1E8EF" },
+  thirdEye:{ name: "Third Eye",    color: "#6E5494", soft: "#EAE3F1" },
+  crown:   { name: "Crown",        color: "#A08BB8", soft: "#F0EAF5" },
+};
+
+const SEASONS = [
+  { theme: "Foundation",    chakra: "root",     start: "2026-01-18",
+    checkIn: { date: "2026-02-01", theme: "Confidence",    chakra: "solar" },
+    lesson: "Trust life's bigger picture. Step into your power with faith and trust, knowing you are guided, supported, and exactly where you need to be." },
+  { theme: "Purpose",       chakra: "crown",    start: "2026-02-17",
+    checkIn: { date: "2026-03-03", theme: "Communication", chakra: "throat" },
+    lesson: "Speak your truth with clarity. Express yourself honestly and kindly. Your voice matters, and when you communicate with integrity, you inspire trust and understanding." },
+  { theme: "Intuition",     chakra: "thirdEye", start: "2026-03-18",
+    checkIn: { date: "2026-04-01", theme: "Connection",    chakra: "heart" },
+    lesson: "Open your heart and lead with love. Nurture compassion, deepen your relationships, and create space for love to flow." },
+  { theme: "Confidence",    chakra: "solar",    start: "2026-04-17",
+    checkIn: { date: "2026-05-01", theme: "Creativity",    chakra: "sacral" },
+    lesson: "Create, explore, and enjoy the flow. Tap into your creativity and allow yourself to play, explore, and express. Embrace pleasure, joy, and the beauty of being fully present." },
+  { theme: "Connection",    chakra: "heart",    start: "2026-05-16",
+    checkIn: { date: "2026-05-31", theme: "Intuition",     chakra: "thirdEye" },
+    lesson: "Listen within and trust your wisdom. Quiet the noise, connect to your inner knowing, and let your intuition guide your heart." },
+  { theme: "Communication", chakra: "throat",   start: "2026-06-14",
+    checkIn: { date: "2026-06-29", theme: "Foundation",    chakra: "root" },
+    lesson: "Build your foundation with intention. Create stability by aligning your daily habits, environment, and mindset. Root into what truly matters so you can move forward with strength and clarity." },
+  { theme: "Creativity",    chakra: "sacral",   start: "2026-07-14",
+    checkIn: { date: "2026-07-29", theme: "Purpose",       chakra: "crown" },
+    lesson: "Reconnect to your purpose. Reflect on what truly fulfills you. Realign with your values and the impact you're here to make." },
+  { theme: "Confidence",    chakra: "solar",    start: "2026-08-12",
+    checkIn: { date: "2026-08-27", theme: "Intuition",     chakra: "thirdEye" },
+    lesson: "Strengthen your intuition. Go deeper within. Meditation, journaling, and quiet time help you receive the insights and answers already waiting for you." },
+  { theme: "Communication", chakra: "throat",   start: "2026-09-10",
+    checkIn: { date: "2026-09-26", theme: "Confidence",    chakra: "solar" },
+    lesson: "Refine your confidence and stand in your truth. Reaffirm your self-worth and continue building your inner strength. Let your actions reflect your values and your belief in yourself." },
+  { theme: "Connection",    chakra: "heart",    start: "2026-10-10",
+    checkIn: { date: "2026-10-25", theme: "Connection",    chakra: "heart" },
+    lesson: "Cultivate gratitude and meaningful relationships. Deepen your bonds, forgive where needed, and practice heart-centered living." },
+  { theme: "Creativity",    chakra: "sacral",   start: "2026-11-08",
+    checkIn: { date: "2026-11-24", theme: "Communication", chakra: "throat" },
+    lesson: "Express your creativity and share your unique gifts. Let your ideas, art, and passions flow freely. When you share what you love, you inspire others and create positive change." },
+  { theme: "Intuition",     chakra: "thirdEye", start: "2026-12-08",
+    checkIn: { date: "2026-12-23", theme: "Creativity",    chakra: "sacral" },
+    lesson: "Reflect, integrate, and prepare for what's next. Honor all you've learned this year. Release what no longer serves you, celebrate your growth, and set intentions for the beautiful new cycle ahead." },
+];
+
+const CYCLE_END = "2027-01-18";
+
+/* ---------- Helpers ---------- */
+
+const d = (s) => { const [y, m, day] = s.split("-").map(Number); return new Date(y, m - 1, day); };
+const fmt = (s) => d(s).toLocaleDateString("en-US", { month: "long", day: "numeric" });
+const fmtShort = (s) => d(s).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+const dayDiff = (a, b) => Math.round((b - a) / 86400000);
+const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+
+function locateToday(today) {
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  if (t < d(SEASONS[0].start)) return { idx: 0, status: "before" };
+  for (let i = 0; i < SEASONS.length; i++) {
+    const end = i < SEASONS.length - 1 ? d(SEASONS[i + 1].start) : d(CYCLE_END);
+    if (t >= d(SEASONS[i].start) && t < end) return { idx: i, status: "in", end };
+  }
+  return { idx: SEASONS.length - 1, status: "after", end: d(CYCLE_END) };
+}
+
+/* ---------- Small visual pieces ---------- */
+
+function orb(chakra, size = 44, glow = false) {
+  const c = CHAKRAS[chakra];
+  const shadow = glow ? `0 0 0 6px ${c.soft}, 0 0 24px ${c.color}55` : `0 0 0 4px ${c.soft}`;
+  return `<div class="orb" style="width:${size}px;height:${size}px;
+    background:radial-gradient(circle at 32% 28%, ${c.color}EE, ${c.color});box-shadow:${shadow}">
+    <div class="orb-ring" style="width:${size * 0.42}px;height:${size * 0.42}px">
+      <div class="orb-dot" style="width:${size * 0.11}px;height:${size * 0.11}px"></div>
+    </div></div>`;
+}
+
+function moon(phase = "full", size = 26, tint = "#C9A24B") {
+  const body = phase === "new"
+    ? `<circle cx="12" cy="12" r="10" fill="none" stroke="${tint}" stroke-width="1.4" stroke-dasharray="2.5 3"/>`
+    : `<circle cx="12" cy="12" r="10" fill="${tint}" opacity="0.92"/>
+       <circle cx="9" cy="9" r="1.4" fill="#FFFDF8" opacity="0.5"/>
+       <circle cx="14.5" cy="13.5" r="2" fill="#FFFDF8" opacity="0.35"/>
+       <circle cx="10" cy="15" r="1" fill="#FFFDF8" opacity="0.4"/>`;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">${body}</svg>`;
+}
+
+function sun(size = 24, tint = "#CE8F22") {
+  let rays = "";
+  for (let i = 0; i < 8; i++) {
+    const a = (i * Math.PI) / 4;
+    rays += `<line x1="${12 + Math.cos(a) * 6.6}" y1="${12 + Math.sin(a) * 6.6}"
+                   x2="${12 + Math.cos(a) * 9.6}" y2="${12 + Math.sin(a) * 9.6}"
+                   stroke="${tint}" stroke-width="1.5" stroke-linecap="round"/>`;
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4.4" fill="${tint}"/>${rays}</svg>`;
+}
+
+/* The season arc — new moon → full moon → next new moon, with a marker for today */
+function seasonArc(progress, checkProgress, chakra, checkChakra) {
+  const W = 340, H = 130, cx = W / 2, rx = 140, ry = 96, cy = 118;
+  const pt = (p) => {
+    const th = Math.PI * (1 - p);
+    return { x: cx + rx * Math.cos(th), y: cy - ry * Math.sin(th) };
+  };
+  const you = pt(Math.min(Math.max(progress, 0.02), 0.98));
+  const chk = pt(checkProgress);
+  const c = CHAKRAS[chakra], k = CHAKRAS[checkChakra];
+  /* -18 of top padding so an apex "FULL MOON" label isn't clipped */
+  return `<svg viewBox="0 -18 ${W} ${H + 18}" style="width:100%;max-width:380px;display:block;margin:0 auto" aria-hidden="true">
+    <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 1 ${cx + rx} ${cy}" fill="none" stroke="#E4D9C6"
+          stroke-width="1.6" stroke-dasharray="1 5" stroke-linecap="round"/>
+    <circle cx="${cx - rx}" cy="${cy}" r="7" fill="none" stroke="#C9A24B" stroke-width="1.4" stroke-dasharray="2 2.5"/>
+    <circle cx="${chk.x}" cy="${chk.y}" r="8" fill="${k.color}" opacity="0.9"/>
+    <circle cx="${chk.x}" cy="${chk.y}" r="12" fill="none" stroke="${k.color}" stroke-width="1" opacity="0.35"/>
+    <circle cx="${cx + rx}" cy="${cy}" r="7" fill="none" stroke="#C9A24B" stroke-width="1.4" stroke-dasharray="2 2.5"/>
+    <circle cx="${you.x}" cy="${you.y}" r="11" fill="${c.color}" opacity="0.16"/>
+    <circle cx="${you.x}" cy="${you.y}" r="5.5" fill="${c.color}" stroke="#FFFDF8" stroke-width="2"/>
+    <text x="${you.x}" y="${you.y - 18}" text-anchor="middle" font-size="9.5" fill="#8A7A64"
+          style="letter-spacing:0.18em;font-family:inherit">YOU ARE HERE</text>
+    <text x="${cx - rx}" y="${cy + 12}" text-anchor="middle" font-size="8.5" fill="#A6987F" style="letter-spacing:0.1em">NEW MOON</text>
+    <text x="${chk.x}" y="${chk.y - 18}" text-anchor="middle" font-size="8.5" fill="${k.color}" style="letter-spacing:0.1em">FULL MOON</text>
+    <text x="${cx + rx}" y="${cy + 12}" text-anchor="middle" font-size="8.5" fill="#A6987F" style="letter-spacing:0.1em">NEXT MOON</text>
+  </svg>`;
+}
+
+/* ---------- Build the page ---------- */
+
+const today = new Date();
+const loc = locateToday(today);
+let openIdx = loc.idx;
+
+const season = SEASONS[loc.idx];
+const start = d(season.start);
+const end = loc.idx < SEASONS.length - 1 ? d(SEASONS[loc.idx + 1].start) : d(CYCLE_END);
+const check = d(season.checkIn.date);
+const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+const total = dayDiff(start, end);
+const elapsed = Math.min(Math.max(dayDiff(start, t0), 0), total);
+const progress = elapsed / total;
+const checkProgress = dayDiff(start, check) / total;
+
+const daysToCheck = dayDiff(t0, check);
+const daysToNext = dayDiff(t0, end);
+const c = CHAKRAS[season.chakra];
+const cc = CHAKRAS[season.checkIn.chakra];
+
+let phaseLabel, phaseNote;
+if (loc.status === "before") {
+  phaseLabel = "The cycle begins soon";
+  phaseNote = `Foundation season opens ${fmt(SEASONS[0].start)}. Rest, reflect, and get ready to set your first intention.`;
+} else if (Math.abs(daysToCheck) <= 1) {
+  phaseLabel = "Mid-season check-in window";
+  phaseNote = "The full moon is here. Pause, take a breath, and realign with the season you're in.";
+} else if (daysToCheck > 1) {
+  phaseLabel = "Season opening — set your intention";
+  phaseNote = `${daysToCheck} days until your ${season.checkIn.theme} full-moon check-in on ${fmt(season.checkIn.date)}.`;
+} else {
+  phaseLabel = "Integration — carry the lesson forward";
+  phaseNote = `Your check-in has passed. ${daysToNext} day${daysToNext === 1 ? "" : "s"} until the next new season begins.`;
+}
+
+const seasonEndLabel = fmtShort(loc.idx < SEASONS.length - 1 ? SEASONS[loc.idx + 1].start : CYCLE_END);
+
+function timelineHTML() {
+  return SEASONS.map((s, i) => {
+    const isNow = i === loc.idx && loc.status === "in";
+    const past = d(s.start) < start || (loc.status === "in" && i < loc.idx);
+    const open = openIdx === i;
+    const col = CHAKRAS[s.chakra];
+    const kcol = CHAKRAS[s.checkIn.chakra];
+    return `<div class="season-row">
+      <div class="row-orb">${orb(s.chakra, 30, isNow)}</div>
+      <button class="row-btn" data-idx="${i}" aria-expanded="${open}"
+        style="border-color:${isNow ? col.color : "#EAE0CE"};background:${isNow ? "#FFFDF8" : "transparent"}">
+        <span class="row-meta">
+          <span class="row-theme" style="color:${col.color}">${esc(s.theme)}</span>
+          <span class="row-chakra">${esc(col.name)}</span>
+          <span class="row-date">&#9728; ${fmtShort(s.start)}</span>
+          ${isNow ? `<span class="now-tag" style="background:${col.color}">NOW</span>` : ""}
+          ${past && !isNow ? `<span class="done-tag">&check;</span>` : ""}
+        </span>
+        <span class="chev">&rsaquo;</span>
+      </button>
+      ${open ? `<div class="detail">
+        <div class="detail-row">${sun(18, col.color)}
+          <div>
+            <p class="detail-head">New Season &middot; ${fmt(s.start)}</p>
+            <p class="detail-body">${esc(s.theme)} — ${esc(col.name)} chakra. Set your intention, welcome the lesson, take the first step forward.</p>
+          </div>
+        </div>
+        <div class="detail-row">${moon("full", 18, kcol.color)}
+          <div>
+            <p class="detail-head">Mid-Season Check-In &middot; ${fmt(s.checkIn.date)}</p>
+            <p class="detail-body">${esc(s.checkIn.theme)} full moon — ${esc(kcol.name)} chakra. Pause &middot; Reflect &middot; Realign. Release what no longer serves you.</p>
+          </div>
+        </div>
+        <div class="detail-lesson" style="border-left:3px solid ${col.color}">
+          <p class="detail-head" style="margin-bottom:4px">Season Lesson</p>
+          <p class="detail-body">${esc(s.lesson)}</p>
+        </div>
+      </div>` : ""}
+    </div>`;
+  }).join("");
+}
+
+document.getElementById("app").innerHTML = `
+  <header>
+    <div class="crest">${sun(22, "#C9A24B")}<h1>MOVE YO LIFE</h1>${moon("full", 20, "#C9A24B")}</div>
+    <div class="rule"></div>
+    <p class="subtitle">A GUIDE TO MOVING THROUGH LIFE'S SEASONS &middot; 2026</p>
+  </header>
+
+  <section class="card" style="border-top:3px solid ${c.color}">
+    <p class="eyebrow">${today.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</p>
+    <div class="season-head">
+      ${orb(season.chakra, 54, true)}
+      <div>
+        <h2 style="color:${c.color}">${esc(season.theme)} Season</h2>
+        <p class="chakra-line">${esc(c.name)} Chakra &middot; ${fmtShort(season.start)} – ${seasonEndLabel}</p>
+      </div>
+    </div>
+
+    ${seasonArc(loc.status === "before" ? 0.02 : progress, checkProgress, season.chakra, season.checkIn.chakra)}
+
+    <div class="phase-pill" style="background:${c.soft}">${esc(phaseLabel)}</div>
+    <p class="phase-note">${esc(phaseNote)}</p>
+
+    <div class="connect-box">
+      <div class="connect-head">
+        ${moon("full", 22, cc.color)}
+        <span class="connect-title">HOW THE MOON CONNECTS</span>
+        ${orb(season.checkIn.chakra, 22)}
+      </div>
+      <p class="connect-text">
+        While the ${fmtShort(season.start)} new moon opened your <strong style="color:${c.color}">${esc(c.name)}</strong> chakra
+        for ${esc(season.theme)} season, the ${fmtShort(season.checkIn.date)} full moon illuminates
+        your <strong style="color:${cc.color}">${esc(cc.name)}</strong> chakra — a ${esc(season.checkIn.theme)} check-in.
+        The sun sets the season in motion; the moon invites you to pause, reflect, and realign.
+      </p>
+    </div>
+
+    <div class="lesson-box">
+      <p class="lesson-label">&#127807; SEASON LESSON — GO DEEPER, GROW DEEPER</p>
+      <p class="lesson-text">${esc(season.lesson)}</p>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <h3>The Full Cycle</h3>
+    <p class="timeline-sub">Tap any season to see its new moon, mid-season check-in, and lesson.</p>
+    <div class="spine-wrap">
+      <div class="spine"></div>
+      <div id="rows">${timelineHTML()}</div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&#9728; EVERY SEASON BEGINS WITH INTENTION &middot; &#9790; EVERY CHECK-IN BRINGS AWARENESS &middot; &#127807; EVERY LESSON INVITES TRANSFORMATION</p>
+    <p class="footer-quote">Life isn't meant to be rushed. Like nature, we grow through seasons.</p>
+  </footer>
+`;
+
+/* Accordion — one open at a time, click again to close */
+document.getElementById("rows").addEventListener("click", (e) => {
+  const btn = e.target.closest(".row-btn");
+  if (!btn) return;
+  const i = Number(btn.dataset.idx);
+  openIdx = openIdx === i ? -1 : i;
+  document.getElementById("rows").innerHTML = timelineHTML();
+});
+</script>
+</body>
+</html>
